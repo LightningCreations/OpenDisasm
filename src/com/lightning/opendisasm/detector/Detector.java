@@ -10,9 +10,9 @@ public class Detector {
     }
     
     @SuppressWarnings("rawtypes")
-    private Class[] detectors = {ELFDetector.class};
+    private static Class[] detectors = {ELFDetector.class};
     
-    public Class<? extends Disassembler> getDisasmFor(byte[] file) {
+    public static Class<? extends Disassembler> getDisasmFor(byte[] file) {
         for(int i = 0; i < detectors.length; i++) {
             try {
                 DetectorBase detector = ((Class<DetectorBase>) detectors[i]).newInstance();
