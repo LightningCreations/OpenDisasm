@@ -15,7 +15,7 @@ public class ELFDisassembler extends Disassembler {
             boolean longInt = EI_CLASS == 2;
             short EI_DATA = reader.readUByte();
             result.addHeaderField("enum", "e_ident[EI_DATA]", EI_DATA);
-            reader.setEndian(EI_DATA == 2);
+            reader.setBigEndian(EI_DATA == 2);
             short EI_VERSION = reader.readUByte();
             result.addHeaderField("enum", "e_ident[EI_VERSION]", EI_VERSION);
             short EI_OSABI = reader.readUByte();

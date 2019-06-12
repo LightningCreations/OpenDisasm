@@ -11,7 +11,7 @@ import com.lightning.opendisasm.util.BytewiseReader;
 public class ELFDetector extends DetectorBase {
     public boolean detect(byte[] file) {
         try (BytewiseReader reader = new BytewiseReader(new ByteArrayInputStream(file))) {
-            if(!reader.readMagic(4).equals("\u007FELF")) {
+            if(reader.readMagic(4)!=0x7f454C46) {
                 return false;
             }
             // More checks may be inserted later
