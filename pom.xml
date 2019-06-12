@@ -6,7 +6,7 @@
   <name>OpenDisasm</name>
   <description>Disassembler, but it's open source! And it works with all architectures someone happens to support!</description>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
