@@ -1,8 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'eclipse'
 apply plugin: 'maven'
 
-group = 'OpenDisasm'
+group = 'github.lightningcreations'
 version = '0.0.1-SNAPSHOT'
+archivesBaseName = 'opendisasm'
 
 description = """OpenDisasm"""
 
