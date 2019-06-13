@@ -206,6 +206,18 @@ public class JVMOpcode {
 	public static final JVMOpcode invokestatic = new JVMOpcode("invokestatic",0xb8,Operand.Const);
 	public static final JVMOpcode invokevirtual = new JVMOpcode("invokevirtual",0xb6,Operand.Const);
 	
+	public static final JVMOpcode ior = new JVMOpcode("ior",0x80);
+	public static final JVMOpcode irem = new JVMOpcode("irem",0x70);
+	public static final JVMOpcode ireturn = new JVMOpcode("ireturn",0xac);
+	public static final JVMOpcode ishl = new JVMOpcode("ishl",0x78);
+	public static final JVMOpcode ishr = new JVMOpcode("ishr",0x7a);
+	
+	public static final JVMOpcode istore = new JVMOpcode("istore",0x36);
+	public static final JVMOpcode istore_0 = new JVMOpcode("istore_0",0x3b);
+	public static final JVMOpcode istore_1 = new JVMOpcode("istore_1",0x3c);
+	public static final JVMOpcode istore_2 = new JVMOpcode("istore_2",0x3d);
+	public static final JVMOpcode istore_3 = new JVMOpcode("istore_3",0x3e);
+	
 	public String toString() {
 		return Integer.toHexString(opcodeId)+" "+opcodeName;
 	}
