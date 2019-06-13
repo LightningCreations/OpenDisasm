@@ -1,12 +1,18 @@
 package com.lightning.opendisasm.disasm.clazz;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class JVMOpcode {
 	
+	
 	public enum Operand{
-		Const, Opcode,
-		Label, Local,
-		WLocal, Byte,
-		Short, Table;
+		Const, WIns,
+		Label, WLabel,
+		Local, WLocal, 
+		Byte , Short, 
+		Table, Disc2,
+		Disc1, Count;
 	}
 	
 	
@@ -15,6 +21,20 @@ public class JVMOpcode {
 	private Operand[] ops;
 	
 	private static JVMOpcode[] opList = new JVMOpcode[256];
+	private static WideForm[] wideforms = new WideForm[256];
+	
+	private static final class WideForm{
+		final JVMOpcode op;
+		final int id;
+		final Operand[] ops;
+		WideForm(JVMOpcode op,int id, Operand... ops) {
+			assert wideforms[id]==null;
+			this.op = op;
+			this.id = id;
+			this.ops = ops;
+			wideforms[id] = this;
+		}
+	}
 	
 	private JVMOpcode(String name,int id, Operand... ops) {
 		assert opList[id]==null;
@@ -100,4 +120,93 @@ public class JVMOpcode {
 	public static final JVMOpcode fastore = new JVMOpcode("fastore",0x51);
 	public static final JVMOpcode fcmpg = new JVMOpcode("fcmpg",0x96);
 	public static final JVMOpcode fcmpl = new JVMOpcode("fcmpl",0x97);
+	public static final JVMOpcode fconst_0 = new JVMOpcode("fconst_0",0xb);
+	public static final JVMOpcode fconst_1 = new JVMOpcode("fconst_1",0xc);
+	public static final JVMOpcode fconst_2 = new JVMOpcode("fconst_2",0xd);
+	public static final JVMOpcode fdiv = new JVMOpcode("fdiv",0x6e);
+	
+	public static final JVMOpcode fload = new JVMOpcode("fload",0x17,Operand.Local);
+	public static final JVMOpcode fload_0 = new JVMOpcode("fload_0",0x22);
+	public static final JVMOpcode fload_1 = new JVMOpcode("fload_1",0x23);
+	public static final JVMOpcode fload_2 = new JVMOpcode("fload_2",0x24);
+	public static final JVMOpcode fload_3 = new JVMOpcode("fload_3",0x25);
+	
+	public static final JVMOpcode fmul = new JVMOpcode("fmul",0x6a);
+	public static final JVMOpcode fneg = new JVMOpcode("fneg",0x76);
+	public static final JVMOpcode frem = new JVMOpcode("frem",0x72);
+	public static final JVMOpcode freturn = new JVMOpcode("freturn",0xae);
+	
+	public static final JVMOpcode fstore = new JVMOpcode("fstore",0x38,Operand.Local);
+	public static final JVMOpcode fstore_0 = new JVMOpcode("fstore_0",0x43);
+	public static final JVMOpcode fstore_1 = new JVMOpcode("fstore_1",0x44);
+	public static final JVMOpcode fstore_2 = new JVMOpcode("fstore_2",0x45);
+	public static final JVMOpcode fstore_3 = new JVMOpcode("fstore_3",0x46);
+	
+	public static final JVMOpcode fsub = new JVMOpcode("fsub",0x66);
+	
+	public static final JVMOpcode getfield = new JVMOpcode("getfield",0xb4,Operand.Const);
+	public static final JVMOpcode getstatic = new JVMOpcode("getstatic",0xb2,Operand.Const);
+	public static final JVMOpcode goto_ins = new JVMOpcode("goto",0xa7,Operand.Label);
+	public static final JVMOpcode goto_w = new JVMOpcode("goto_w",0xc8,Operand.WLabel);
+	
+	public static final JVMOpcode i2b = new JVMOpcode("i2b",0x91);
+	public static final JVMOpcode i2c = new JVMOpcode("i2c",0x92);
+	public static final JVMOpcode i2d = new JVMOpcode("i2d",0x87);
+	public static final JVMOpcode i2f = new JVMOpcode("i2f",0x86);
+	public static final JVMOpcode i2l = new JVMOpcode("i2l",0x85);
+	public static final JVMOpcode i2s = new JVMOpcode("i2s",0x93);
+	public static final JVMOpcode iadd = new JVMOpcode("iadd",0x60);
+	public static final JVMOpcode iaload = new JVMOpcode("iaload",0x2e);
+	public static final JVMOpcode iand = new JVMOpcode("iand",0x7e);
+	public static final JVMOpcode iastore = new JVMOpcode("iastore",0x4f);
+	
+	public static final JVMOpcode iconst_m1 = new JVMOpcode("iconst_m1",0x2);
+	public static final JVMOpcode iconst_0 = new JVMOpcode("iconst_0",0x3);
+	public static final JVMOpcode iconst_1 = new JVMOpcode("iconst_1",0x4);
+	public static final JVMOpcode iconst_2 = new JVMOpcode("iconst_2",0x5);
+	public static final JVMOpcode iconst_3 = new JVMOpcode("iconst_3",0x6);
+	public static final JVMOpcode iconst_4 = new JVMOpcode("iconst_4",0x7);
+	public static final JVMOpcode iconst_5 = new JVMOpcode("iconst_5",0x8);
+	
+	public static final JVMOpcode idiv = new JVMOpcode("idiv",0x6c);
+	
+	public static final JVMOpcode if_acmpeq = new JVMOpcode("if_acmpeq",0xa5,Operand.Label);
+	public static final JVMOpcode if_acmpne = new JVMOpcode("if_acmpne",0xa6,Operand.Label);
+	public static final JVMOpcode if_icmpeq = new JVMOpcode("if_icmpeq",0x9f,Operand.Label);
+	public static final JVMOpcode if_icmpne = new JVMOpcode("if_icmpne",0xa0,Operand.Label);
+	public static final JVMOpcode if_icmplt = new JVMOpcode("if_icmplt",0xa1,Operand.Label);
+	public static final JVMOpcode if_icmpge = new JVMOpcode("if_icmpge",0xa2,Operand.Label);
+	public static final JVMOpcode if_icmpgt = new JVMOpcode("if_icmpgt",0xa3,Operand.Label);
+	public static final JVMOpcode if_icmple = new JVMOpcode("if_icmple",0xa4,Operand.Label);
+	public static final JVMOpcode ifeq = new JVMOpcode("ifeq",0x99,Operand.Label);
+	public static final JVMOpcode ifne = new JVMOpcode("ifne",0x9a,Operand.Label);
+	public static final JVMOpcode iflt = new JVMOpcode("iflt",0x9b,Operand.Label);
+	public static final JVMOpcode ifge = new JVMOpcode("ifge",0x9c,Operand.Label);
+	public static final JVMOpcode ifgt = new JVMOpcode("ifgt",0x9d,Operand.Label);
+	public static final JVMOpcode ifle = new JVMOpcode("ifle",0x9e,Operand.Label);
+	public static final JVMOpcode ifnonnull = new JVMOpcode("ifnonnul",0xc7,Operand.Label);
+	public static final JVMOpcode ifnull = new JVMOpcode("ifnull",0xc6);
+	
+	public static final JVMOpcode iinc = new JVMOpcode("iinc",0x84,Operand.Local,Operand.Byte);
+	
+	public static final JVMOpcode iload = new JVMOpcode("iload",0x15,Operand.Local);
+	public static final JVMOpcode iload_0 = new JVMOpcode("iload_0",0x1a);
+	public static final JVMOpcode iload_1 = new JVMOpcode("iload_1",0x1b);
+	public static final JVMOpcode iload_2 = new JVMOpcode("iload_2",0x1c);
+	public static final JVMOpcode iload_3 = new JVMOpcode("iload_3",0x1d);
+	
+	public static final JVMOpcode imul = new JVMOpcode("imul",0x68);
+	public static final JVMOpcode ineg = new JVMOpcode("ineg",0x74);
+	
+	public static final JVMOpcode instanceof_ins = new JVMOpcode("instanceof",0xc1);
+	
+	public static final JVMOpcode invokedynamic = new JVMOpcode("invokedynamic",0xba,Operand.Const,Operand.Disc2);
+	public static final JVMOpcode invokeinterface = new JVMOpcode("invokeinterface",0xb9,Operand.Const,Operand.Count,Operand.Disc1);
+	public static final JVMOpcode invokespecial = new JVMOpcode("invokespecial",0xb7,Operand.Const);
+	public static final JVMOpcode invokestatic = new JVMOpcode("invokestatic",0xb8,Operand.Const);
+	public static final JVMOpcode invokevirtual = new JVMOpcode("invokevirtual",0xb6,Operand.Const);
+	
+	public String toString() {
+		return Integer.toHexString(opcodeId)+" "+opcodeName;
+	}
 }
