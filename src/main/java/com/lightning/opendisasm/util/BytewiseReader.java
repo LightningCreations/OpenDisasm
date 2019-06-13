@@ -26,7 +26,7 @@ public class BytewiseReader implements Closeable {
     }
     
     
-    public int readMagic(int length) throws IOException {
+    public int readMagicInt(int length) throws IOException {
         assert length <= 4&&length>0;
         switch(length) {
         case 1:
