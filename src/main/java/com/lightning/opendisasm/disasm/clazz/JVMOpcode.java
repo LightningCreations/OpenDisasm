@@ -1,7 +1,5 @@
 package com.lightning.opendisasm.disasm.clazz;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class JVMOpcode {
 	
