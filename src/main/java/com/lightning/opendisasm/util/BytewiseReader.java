@@ -8,11 +8,13 @@ import java.io.InputStream;
 public class BytewiseReader implements Closeable {
     private InputStream stream;
     private boolean bigEndian;
+    private long pos;
     
     private int read() throws IOException {
     	int val = stream.read();
     	if(val<0)
     		throw new EOFException("Reached end of stream");
+    	pos++;
     	return val;
     }
     
@@ -24,7 +26,6 @@ public class BytewiseReader implements Closeable {
         this.stream = stream;
         this.bigEndian = bigEndian;
     }
-    
     
     public int readMagicInt(int length) throws IOException {
         assert length <= 4&&length>0;
@@ -57,7 +58,7 @@ public class BytewiseReader implements Closeable {
     public long readUInt() throws IOException {
         if(bigEndian) {
             return  ((0x00FFL & read()) << 24) + ((0x00FF  & read()) << 16) +
-                    ((0x00FF  & read()) <<  8) + ((0x00FF  & stream.read())      );
+                    ((0x00FF  & read()) <<  8) + ((0x00FF  & read())      );
         } else {
             return  ((0x00FF  & read())      ) + ((0x00FF  & read()) <<  8) +
                     ((0x00FF  & read()) << 16) + ((0x00FFL & read()) << 24);
@@ -66,15 +67,15 @@ public class BytewiseReader implements Closeable {
     
     public long readULong() throws IOException {
         if(bigEndian) {
-            return  ((0x00FF & stream.read()) << 56L) + ((0x00FF & stream.read()) << 48L) +
-                    ((0x00FF & stream.read()) << 40L) + ((0x00FF & stream.read()) << 32L) +
-                    ((0x00FF & stream.read()) << 24L) + ((0x00FF & stream.read()) << 16L) +
-                    ((0x00FF & stream.read()) <<  8L) + ((0x00FF & stream.read())       );
+            return  ((0x00FF & read()) << 56L) + ((0x00FF & read()) << 48L) +
+                    ((0x00FF & read()) << 40L) + ((0x00FF & read()) << 32L) +
+                    ((0x00FF & read()) << 24L) + ((0x00FF & read()) << 16L) +
+                    ((0x00FF & read()) <<  8L) + ((0x00FF & read())       );
         } else {
-            return  ((0x00FF & stream.read())       ) + ((0x00FF & stream.read()) << 8L ) +
-                    ((0x00FF & stream.read()) << 16L) + ((0x00FF & stream.read()) << 24L) +
-                    ((0x00FF & stream.read()) << 32L) + ((0x00FF & stream.read()) << 40L) +
-                    ((0x00FF & stream.read()) << 48L) + ((0x00FF & stream.read()) << 56L);
+            return  ((0x00FF & read())       ) + ((0x00FF & read()) << 8L ) +
+                    ((0x00FF & read()) << 16L) + ((0x00FF & read()) << 24L) +
+                    ((0x00FF & read()) << 32L) + ((0x00FF & read()) << 40L) +
+                    ((0x00FF & read()) << 48L) + ((0x00FF & read()) << 56L);
         }
     }
     
@@ -85,8 +86,22 @@ public class BytewiseReader implements Closeable {
     public void skip(long numBytes) throws IOException {
         long bytesToSkip = numBytes;
         int numTries = 0;
-        while(bytesToSkip != 0 && numTries++ < 0x10) // Convoluted statement, I know.
-            bytesToSkip -= stream.skip(bytesToSkip);
+        while(bytesToSkip != 0 && numTries++ < 0x10) { // Convoluted statement, I know.
+            long bytesSkipped = stream.skip(bytesToSkip);
+            bytesToSkip -= bytesSkipped;
+            pos += bytesSkipped;
+        }
+    }
+    
+    public void skipTo(long newPos) throws IOException {
+        if(newPos == pos)
+            return;
+        if(newPos < pos) {
+            // TODO: Implement backwards skipping
+            throw new ArrayIndexOutOfBoundsException("Can't go backwards in a stream! (yet)");
+        } else {
+            skip(newPos - pos);
+        }
     }
 
     public void close() throws IOException {

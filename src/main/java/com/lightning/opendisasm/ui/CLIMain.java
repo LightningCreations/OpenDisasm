@@ -1,9 +1,11 @@
 package com.lightning.opendisasm.ui;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
@@ -21,7 +23,7 @@ import com.lightning.opendisasm.disasm.Disassembler;
 
 public class CLIMain {
     private static final Logger LOGGER = LogManager.getLogger(CLIMain.class);
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         LOGGER.info("Starting...");
         
         LOGGER.trace("Creating Options...");
@@ -85,5 +87,8 @@ public class CLIMain {
         DisassembledFile result = disassembler.disassemble(file);
         LOGGER.trace("Done disassembling");
         LOGGER.info("Result:\n" + result.toString());
+        BufferedWriter printer = new BufferedWriter(new FileWriter("result.txt"));
+        printer.write(result.toString());
+        printer.close();
     }
 }

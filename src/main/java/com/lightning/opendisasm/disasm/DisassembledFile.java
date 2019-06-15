@@ -1,5 +1,6 @@
 package com.lightning.opendisasm.disasm;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class DisassembledFile {
@@ -7,6 +8,7 @@ public class DisassembledFile {
     private HashMap<String, String> headerTypes;
     private HashMap<Integer, String> headerOrdering;
     private int currentHeaderPos;
+    private long entryPoint;
     
     public DisassembledFile() {
         header = new HashMap<>();
@@ -30,11 +32,19 @@ public class DisassembledFile {
         return header.get(field);
     }
     
+    public long getEntryPoint() {
+        return entryPoint;
+    }
+    
+    public void setEntryPoint(long entryPoint) {
+        this.entryPoint = entryPoint;
+    }
+    
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
         
-        result.append("DisassembledFile result = {\n");
+        result.append("{\n");
         for(int i = 0; i < headerOrdering.size(); i++) {
             String curField = headerOrdering.get(i);
             String type = headerTypes.get(curField);
@@ -45,6 +55,8 @@ public class DisassembledFile {
             result.append(" = ");
             if(value instanceof Number)
                 result.append(String.format("0x%X", value));
+            else if(value.getClass().isArray())
+                result.append(Arrays.toString((Object[]) value));
             else
                 result.append(value);
             result.append(";\n");
