@@ -24,7 +24,37 @@ public class ELFDisassembler extends Disassembler implements EnumNamer {
 
             result.append("enum p_type = ");
             result.append(String.format("0x%X", p_type));
-            result.append(";\n");
+            result.append(" (");
+            switch((int) p_type) {
+            case 1:
+                result.append("PT_LOAD");
+                break;
+            case 2:
+                result.append("PT_DYNAMIC");
+                break;
+            case 3:
+                result.append("PT_INTERP");
+                break;
+            case 4:
+                result.append("PT_NOTE");
+                break;
+            case 6:
+                result.append("PT_PHDR");
+                break;
+            case 0x6474E550:
+                result.append("PT_GNU_EH_FRAME");
+                break;
+            case 0x6474E551:
+                result.append("PT_GNU_STACK");
+                break;
+            case 0x6474E552:
+                result.append("PT_GNU_RELRO");
+                break;
+            default:
+                result.append("unknown");
+                break;
+            }
+            result.append(");\n");
             
             if(longInt) {
                 result.append("uint32_t p_flags = ");
@@ -114,12 +144,102 @@ public class ELFDisassembler extends Disassembler implements EnumNamer {
             
             result.append("enum sh_type = ");
             result.append(String.format("0x%X", sh_type));
-            result.append(";\n");
+            result.append(" (");
+            switch((int) sh_type) {
+            case 0:
+                result.append("SHT_NULL");
+                break;
+            case 1:
+                result.append("SHT_PROGBITS");
+                break;
+            case 3:
+                result.append("SHT_STRTAB");
+                break;
+            case 4:
+                result.append("SHT_RELA");
+                break;
+            case 6:
+                result.append("SHT_DYNAMIC");
+                break;
+            case 7:
+                result.append("SHT_NOTE");
+                break;
+            case 8:
+                result.append("SHT_NOBITS");
+                break;
+            case 0xB:
+                result.append("SHT_DYNSYM");
+                break;
+            case 0xE:
+                result.append("SHT_INIT_ARRAY");
+                break;
+            case 0xF:
+                result.append("SHT_FINI_ARRAY");
+                break;
+            case 0x6FFFFFF6:
+                result.append("SHT_GNU_HASH");
+                break;
+            case 0x6FFFFFFE:
+                result.append("SHT_GNU_verneed");
+                break;
+            case 0x6FFFFFFF:
+                result.append("SHT_GNU_versym");
+                break;
+            default:
+                result.append("unknown");
+                break;
+            }
+            result.append(");\n");
             
             if(longInt) {
                 result.append("uint64_t sh_flags = ");
                 result.append(String.format("0x%X", sh_flags));
-                result.append(";\n");
+                result.append(" (");
+                long tmpFlags = sh_flags;
+                boolean alreadyFlagged = false;
+                if((tmpFlags & 0x1) != 0) {
+                    if(alreadyFlagged) result.append(" | ");
+                    else alreadyFlagged = true;
+                    result.append("SHF_WRITE");
+                    tmpFlags -= 0x1;
+                }
+                if((tmpFlags & 0x2) != 0) {
+                    if(alreadyFlagged) result.append(" | ");
+                    else alreadyFlagged = true;
+                    result.append("SHF_ALLOC");
+                    tmpFlags -= 0x2;
+                }
+                if((tmpFlags & 0x4) != 0) {
+                    if(alreadyFlagged) result.append(" | ");
+                    else alreadyFlagged = true;
+                    result.append("SHF_EXECINSTR");
+                    tmpFlags -= 0x4;
+                }
+                if((tmpFlags & 0x10) != 0) {
+                    if(alreadyFlagged) result.append(" | ");
+                    else alreadyFlagged = true;
+                    result.append("SHF_MERGE");
+                    tmpFlags -= 0x10;
+                }
+                if((tmpFlags & 0x20) != 0) {
+                    if(alreadyFlagged) result.append(" | ");
+                    else alreadyFlagged = true;
+                    result.append("SHF_STRINGS");
+                    tmpFlags -= 0x20;
+                }
+                if((tmpFlags & 0x40) != 0) {
+                    if(alreadyFlagged) result.append(" | ");
+                    else alreadyFlagged = true;
+                    result.append("SHF_INFO_LINK");
+                    tmpFlags -= 0x40;
+                }
+                if(tmpFlags != 0) {
+                    if(alreadyFlagged) result.append(" | ");
+                    else alreadyFlagged = true;
+                    result.append(String.format("%X", tmpFlags));
+                }
+                if(!alreadyFlagged) result.append("SHF_NONE");
+                result.append(");\n");
 
                 result.append("Elf64_Addr sh_addr = ");
                 result.append(String.format("0x%X", sh_addr));
@@ -355,7 +475,7 @@ public class ELFDisassembler extends Disassembler implements EnumNamer {
             case 1:
                 return "EV_CURRENT";
             }
-        } else {}
+        }
         
         return "unknown";
     }
