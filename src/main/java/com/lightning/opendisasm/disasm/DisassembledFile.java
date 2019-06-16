@@ -1,9 +1,12 @@
 package com.lightning.opendisasm.disasm;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class DisassembledFile {
+    private ArrayList<EnumNamer> namers;
+    
     private HashMap<String, Object> header;
     private HashMap<String, String> headerTypes;
     private HashMap<Integer, String> headerOrdering;
@@ -11,9 +14,16 @@ public class DisassembledFile {
     private long entryPoint;
     
     public DisassembledFile() {
+        namers = new ArrayList<>();
+        
         header = new HashMap<>();
         headerTypes = new HashMap<>();
         headerOrdering = new HashMap<>();
+    }
+    
+    public void addEnumNamer(EnumNamer namer) {
+        if(!namers.contains(namer))
+            namers.add(namer);
     }
     
     public void addHeaderField(String type, String name, Object value) {
@@ -59,6 +69,14 @@ public class DisassembledFile {
                 result.append(Arrays.toString((Object[]) value));
             else
                 result.append(value);
+            if("enum".equals(type)) {
+                String name = "unknown";
+                for(int j = 0; j < namers.size() && "unknown".equals(name); j++)
+                    name = namers.get(j).getEnumName(curField, value, this);
+                result.append(" (");
+                result.append(name);
+                result.append(")");
+            }
             result.append(";\n");
         }
         result.append("};");

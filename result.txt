@@ -1,12 +1,12 @@
 {
-enum e_ident[EI_CLASS] = 0x2;
-enum e_ident[EI_DATA] = 0x1;
-enum e_ident[EI_VERSION] = 0x1;
-enum e_ident[EI_OSABI] = 0x0;
-enum e_ident[EI_ABIVERSION] = 0x0;
-enum e_type = 0x3;
-enum e_machine = 0x3E;
-enum e_version = 0x1;
+enum e_ident[EI_CLASS] = 0x2 (ELFCLASS64);
+enum e_ident[EI_DATA] = 0x1 (ELFDATA2LSB);
+enum e_ident[EI_VERSION] = 0x1 (EV_CURRENT);
+enum e_ident[EI_OSABI] = 0x0 (ELFOSABI_NONE);
+uint8_t e_ident[EI_ABIVERSION] = 0x0;
+enum e_type = 0x3 (ET_DYN);
+enum e_machine = 0x3E (EM_X86_64);
+enum e_version = 0x1 (EV_CURRENT);
 Elf64_Addr e_entry = 0x540;
 Elf64_Off e_phoff = 0x40;
 Elf64_Off e_shoff = 0x1930;

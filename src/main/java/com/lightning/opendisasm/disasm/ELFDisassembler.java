@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.lightning.opendisasm.util.BytewiseReader;
 
-public class ELFDisassembler extends Disassembler {
+public class ELFDisassembler extends Disassembler implements EnumNamer {
     public class ProgramHeaderEntry {
         public long p_type; // All fields are long to reduce chance of integer overflow
         public long p_flags;
@@ -184,6 +184,7 @@ public class ELFDisassembler extends Disassembler {
     
     public DisassembledFile disassemble(byte[] file) {
         DisassembledFile result = new DisassembledFile();
+        result.addEnumNamer(this);
         try(BytewiseReader reader = new BytewiseReader(new ByteArrayInputStream(file))) {
             reader.skip(4); // e_ident[EI_MAG0], e_ident[EI_MAG1], e_ident[EI_MAG2], e_ident[EI_MAG3]
             short EI_CLASS = reader.readUByte();
@@ -197,7 +198,7 @@ public class ELFDisassembler extends Disassembler {
             short EI_OSABI = reader.readUByte();
             result.addHeaderField("enum", "e_ident[EI_OSABI]", EI_OSABI);
             short EI_ABIVERSION = reader.readUByte();
-            result.addHeaderField("enum", "e_ident[EI_ABIVERSION]", EI_ABIVERSION);
+            result.addHeaderField("uint8_t", "e_ident[EI_ABIVERSION]", EI_ABIVERSION);
             reader.skip(7); // EI_PAD
             int e_type = reader.readUShort();
             result.addHeaderField("enum", "e_type", e_type);
@@ -296,5 +297,66 @@ public class ELFDisassembler extends Disassembler {
             e.printStackTrace();
         }
         return result;
+    }
+    
+    public String getEnumName(String varName, Object _value, DisassembledFile reault) {
+        int value = ((Number)_value).intValue();
+        
+        if("e_ident[EI_CLASS]".equals(varName)) {
+            switch(value) {
+            case 0:
+                return "ELFCLASSNONE";
+            case 1:
+                return "ELFCLASS32";
+            case 2:
+                return "ELFCLASS64";
+            }
+        } else if("e_ident[EI_DATA]".equals(varName)) {
+            switch(value) {
+            case 0:
+                return "ELFDATANONE";
+            case 1:
+                return "ELFDATA2LSB";
+            case 2:
+                return "ELFDATA2MSB";
+            }
+        } else if("e_ident[EI_VERSION]".equals(varName)) {
+            switch(value) {
+            case 0:
+                return "EV_NONE";
+            case 1:
+                return "EV_CURRENT";
+            }
+        } else if("e_ident[EI_OSABI]".equals(varName)) {
+            switch(value) {
+            case 0:
+                return "ELFOSABI_NONE";
+            case 3:
+                return "ELFOSABI_LINUX";
+            }
+        } else if("e_type".equals(varName)) {
+            switch(value) {
+            case 0:
+                return "ET_NONE";
+            case 3:
+                return "ET_DYN";
+            }
+        } else if("e_machine".equals(varName)) {
+            switch(value) {
+            case 0:
+                return "EM_NONE";
+            case 0x3E:
+                return "EM_X86_64";
+            }
+        } else if("e_version".equals(varName)) {
+            switch(value) {
+            case 0:
+                return "EV_NONE";
+            case 1:
+                return "EV_CURRENT";
+            }
+        } else {}
+        
+        return "unknown";
     }
 }
