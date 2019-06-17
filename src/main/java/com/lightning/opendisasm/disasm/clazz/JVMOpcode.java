@@ -5,12 +5,14 @@ public class JVMOpcode {
 	
 	
 	public enum Operand{
-		Const, WIns,
-		Label, WLabel,
-		Local, WLocal, 
-		Byte , Short, 
-		Table, Disc2,
-		Disc1, Count;
+		Const , WIns ,
+		Label , WLabel,
+		Local , WLocal, 
+		Byte  , Short, 
+		LookS , Disc2,
+		Disc1 , Count,
+		NConst, AType,
+		Table ;
 	}
 	
 	
@@ -25,10 +27,10 @@ public class JVMOpcode {
 		final JVMOpcode op;
 		final int id;
 		final Operand[] ops;
-		WideForm(JVMOpcode op,int id, Operand... ops) {
-			assert wideforms[id]==null;
+		WideForm(JVMOpcode op, Operand... ops) {
+			assert wideforms[op.opcodeId]==null;
 			this.op = op;
-			this.id = id;
+			this.id = op.opcodeId;
 			this.ops = ops;
 			wideforms[id] = this;
 		}
@@ -215,6 +217,94 @@ public class JVMOpcode {
 	public static final JVMOpcode istore_1 = new JVMOpcode("istore_1",0x3c);
 	public static final JVMOpcode istore_2 = new JVMOpcode("istore_2",0x3d);
 	public static final JVMOpcode istore_3 = new JVMOpcode("istore_3",0x3e);
+	
+	public static final JVMOpcode isub = new JVMOpcode("isub",0x64);
+	public static final JVMOpcode iushr = new JVMOpcode("iushr",0x7c);
+	public static final JVMOpcode ixor = new JVMOpcode("ixor",0x82);
+	
+	public static final JVMOpcode jsr = new JVMOpcode("jsr",0xa8,Operand.Label);
+	public static final JVMOpcode jsr_w = new JVMOpcode("jsr_w",0xc9,Operand.WLabel);
+
+	public static final JVMOpcode l2d = new JVMOpcode("l2d",0x8a);
+	public static final JVMOpcode l2f = new JVMOpcode("l2f",0x89);
+	public static final JVMOpcode l2i = new JVMOpcode("l2i",0x88);
+	public static final JVMOpcode ladd = new JVMOpcode("ladd",0x61);
+	public static final JVMOpcode laload = new JVMOpcode("laload",0x2f);
+	public static final JVMOpcode land = new JVMOpcode("land",0x7f);
+	public static final JVMOpcode lastore = new JVMOpcode("lastore",0x50);
+	public static final JVMOpcode lcmp = new JVMOpcode("lcmp",0x94);
+	
+	public static final JVMOpcode lconst_0 = new JVMOpcode("lconst_0",0x9);
+	public static final JVMOpcode lconst_1 = new JVMOpcode("lconst_1",0xa);
+	public static final JVMOpcode ldc = new JVMOpcode("ldc",0x12,Operand.NConst);
+	public static final JVMOpcode ldc_w = new JVMOpcode("ldc_w",0x13,Operand.Const);
+	public static final JVMOpcode ldc2_w = new JVMOpcode("ldc2_w",0x14,Operand.Const);
+	
+	public static final JVMOpcode ldiv = new JVMOpcode("ldiv",0x6d);
+	
+	public static final JVMOpcode lload = new JVMOpcode("lload",0x16,Operand.Local);
+	public static final JVMOpcode lload_0 = new JVMOpcode("lload_0",0x1e);
+	public static final JVMOpcode lload_1 = new JVMOpcode("lload_1",0x1f);
+	public static final JVMOpcode lload_2 = new JVMOpcode("lload_2",0x20);
+	public static final JVMOpcode lload_3 = new JVMOpcode("lload_3",0x21);
+	
+	public static final JVMOpcode lmul = new JVMOpcode("lmul",0x69);
+	public static final JVMOpcode lneg = new JVMOpcode("lneg",0x75);
+	
+	public static final JVMOpcode lookupswitch = new JVMOpcode("lookupswitch",0xab,Operand.LookS);
+	public static final JVMOpcode lor = new JVMOpcode("lor",0x81);
+	public static final JVMOpcode lrem = new JVMOpcode("lrem",0x71);
+	public static final JVMOpcode lreturn = new JVMOpcode("lreturn",0xad);
+	public static final JVMOpcode lshl = new JVMOpcode("lshl",0x79);
+	public static final JVMOpcode lshr = new JVMOpcode("lshr",0x7b);
+	
+	public static final JVMOpcode lstore = new JVMOpcode("lstore",0x37,Operand.Local);
+	public static final JVMOpcode lstore_0 = new JVMOpcode("lstore_0",0x3f);
+	public static final JVMOpcode lstore_1 = new JVMOpcode("lstore_1",0x40);
+	public static final JVMOpcode lstore_2 = new JVMOpcode("lstore_2",0x41);
+	public static final JVMOpcode lstore_3 = new JVMOpcode("lstore_3",0x42);
+	
+	public static final JVMOpcode lsub = new JVMOpcode("lsub",0x65);
+	public static final JVMOpcode lushr = new JVMOpcode("iushr",0x7d);
+	public static final JVMOpcode lxor = new JVMOpcode("lxor",0x83);
+	
+	public static final JVMOpcode monitorenter = new JVMOpcode("monitorenter",0xc2);
+	public static final JVMOpcode monitorexit = new JVMOpcode("monitorexit",0xc3);
+	public static final JVMOpcode multianewarray = new JVMOpcode("multianewarray",0xc5,Operand.Const,Operand.Byte);
+	public static final JVMOpcode newi = new JVMOpcode("new",0xbb);
+	public static final JVMOpcode newarray = new JVMOpcode("newarray",0xbc,Operand.AType);
+	public static final JVMOpcode nop = new JVMOpcode("nop",0x0);
+	public static final JVMOpcode pop = new JVMOpcode("pop",0x57);
+	public static final JVMOpcode pop2 = new JVMOpcode("pop2",0x58);
+	
+	public static final JVMOpcode putfield = new JVMOpcode("putfield",0xb5,Operand.Const);
+	public static final JVMOpcode putstatic = new JVMOpcode("putstatic",0xb3,Operand.Const);
+	
+	public static final JVMOpcode ret = new JVMOpcode("ret",0xa9,Operand.Local);
+	public static final JVMOpcode returni = new JVMOpcode("return",0xb1);
+	
+	public static final JVMOpcode saload = new JVMOpcode("saload",0x35);
+	public static final JVMOpcode sastore = new JVMOpcode("sastore",0x56);
+	public static final JVMOpcode sipush = new JVMOpcode("sipush",0x11,Operand.Short);
+	public static final JVMOpcode swap = new JVMOpcode("swap",0x5f);
+	
+	public static final JVMOpcode tableswitch = new JVMOpcode("tableswitch",0xaa,Operand.Table);
+	public static final JVMOpcode wide = new JVMOpcode("wide",0xc4,Operand.WIns);
+	
+	public static final WideForm iload_w = new WideForm(iload,Operand.WLocal);
+	public static final WideForm fload_w = new WideForm(fload,Operand.WLocal);
+	public static final WideForm aload_w = new WideForm(aload,Operand.WLocal);
+	public static final WideForm lload_w = new WideForm(lload,Operand.WLocal);
+	public static final WideForm dload_w = new WideForm(dload,Operand.WLocal);
+	public static final WideForm istore_w = new WideForm(istore,Operand.WLocal);
+	public static final WideForm astore_w = new WideForm(astore,Operand.WLocal);
+	public static final WideForm fstore_w = new WideForm(fstore,Operand.WLocal);
+	public static final WideForm lstore_w = new WideForm(lstore,Operand.WLocal);
+	public static final WideForm dstore_w = new WideForm(dstore,Operand.WLocal);
+	public static final WideForm ret_w = new WideForm(ret,Operand.WLocal);
+	public static final WideForm iinc_w = new WideForm(iinc,Operand.WLocal,Operand.Short);
+	
+	
 	
 	public String toString() {
 		return Integer.toHexString(opcodeId)+" "+opcodeName;
