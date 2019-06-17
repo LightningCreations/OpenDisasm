@@ -2,13 +2,17 @@ package com.lightning.opendisasm.ui.gui;
 
 import java.beans.PropertyVetoException;
 
+import javax.swing.JDesktopPane;
+
 public class GUIFunctions {
     public static GUIFrame mainFrame;
     public static GUIAboutFrame aboutFrame;
+    public static JDesktopPane desktop;
     private static boolean framesAdded = false;
     
     static {
         aboutFrame = new GUIAboutFrame();
+        desktop = new JDesktopPane();
     }
     
     public static void cleanup() {
@@ -27,7 +31,8 @@ public class GUIFunctions {
     
     private static void addCommonFrames() {
         if(mainFrame != null && !framesAdded) {
-            mainFrame.add(aboutFrame);
+            mainFrame.add(desktop);
+            desktop.add(aboutFrame);
             framesAdded = true;
         }
     }
