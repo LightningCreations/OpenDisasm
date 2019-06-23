@@ -4,11 +4,19 @@ import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 public class BytewiseReader implements Closeable {
     private InputStream stream;
     private boolean bigEndian;
     private long pos;
+    
+    public byte[] readBytes(int len) throws IOException {
+    	byte[] ret = new byte[len];
+    	if(stream.read(ret)!=len)
+    		throw new EOFException("Unexpected End of Stream");
+    	return ret;
+    }
     
     private int read() throws IOException {
     	int val = stream.read();
@@ -107,4 +115,42 @@ public class BytewiseReader implements Closeable {
     public void close() throws IOException {
         stream.close();
     }
+    
+    public static enum StringType{
+    	LengthPrefixed {
+			@Override
+			byte[] readBytes(BytewiseReader in) throws IOException {
+				int len = in.readUShort();
+				return in.readBytes(len);
+			}
+		}, NulTerminated {
+			@Override
+			byte[] readBytes(BytewiseReader in) {
+				// TODO Implement Reading Strings Terminated by a NUL (0x00) byte.
+				return null;
+			}
+		};
+    	
+    	abstract byte[] readBytes(BytewiseReader in)throws IOException;
+    }
+
+	public String readString(Charset set) throws IOException {
+		// TODO Auto-generated method stub
+		return readString(set,StringType.LengthPrefixed);
+	}
+
+	public String readString(Charset set, StringType type) throws IOException {
+		byte[] bytes = type.readBytes(this);
+		return new String(bytes,set);
+	}
+
+	public int readInt() throws IOException {
+		// TODO Auto-generated method stub
+		return (int)readUInt();
+	}
+	
+	public float readFloat() throws IOException{
+		return Float.intBitsToFloat(readInt());
+	}
+	
 }
