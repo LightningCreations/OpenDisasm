@@ -54,7 +54,12 @@ public abstract class Constant {
 		}
 		ConstInt(ConstantPool pool,BytewiseReader reader){
 			super(pool,3);
-			this.value = reader.readInt();
+			try {
+				this.value = reader.readInt();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		private int value;
