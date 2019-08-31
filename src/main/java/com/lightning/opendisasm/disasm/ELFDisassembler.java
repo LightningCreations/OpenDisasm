@@ -3,6 +3,7 @@ package com.lightning.opendisasm.disasm;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
 
 public class ELFDisassembler extends Disassembler implements EnumNamer {
@@ -479,4 +480,10 @@ public class ELFDisassembler extends Disassembler implements EnumNamer {
         
         return "unknown";
     }
+
+	@Override
+	public Node disassembleTree(byte[] file) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

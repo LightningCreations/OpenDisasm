@@ -1,21 +1,24 @@
 package com.lightning.opendisasm.disasm.clazz.node;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractNode implements INode {
+import com.lightning.opendisasm.tree.Node;
+
+public abstract class AbstractNode implements EntityNode {
 	
 	private final String name;
 	private final int modifiers;
-	private final INode parent;
-	private final List<INode> children;
+	private final EntityNode parent;
+	private final List<EntityNode> children;
 	
-	protected void addChild(INode child) {
+	protected void addChild(EntityNode child) {
 		assert child.getParent()==this;
 		children.add(child);
 	}
 	
-	public AbstractNode(String name, int modifiers, INode parent) {
+	public AbstractNode(String name, int modifiers, EntityNode parent) {
 		this.name = name;
 		this.modifiers = modifiers;
 		this.parent = parent;
@@ -29,7 +32,7 @@ public abstract class AbstractNode implements INode {
 	}
 
 	@Override
-	public INode getParent() {
+	public EntityNode getParent() {
 		// TODO Auto-generated method stub
 		return parent;
 	}
@@ -41,9 +44,9 @@ public abstract class AbstractNode implements INode {
 	}
 
 	@Override
-	public INode[] getChildren() {
+	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub
-		return children.toArray(new INode[0]);
+		return Collections.unmodifiableList(children);
 	}
 
 }
