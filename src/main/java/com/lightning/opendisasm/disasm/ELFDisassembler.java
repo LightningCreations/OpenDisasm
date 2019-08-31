@@ -1,7 +1,7 @@
 package com.lightning.opendisasm.disasm;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
@@ -303,10 +303,10 @@ public class ELFDisassembler extends Disassembler implements EnumNamer {
         }
     }
     
-    public DisassembledFile disassemble(byte[] file) {
+    public DisassembledFile disassemble(InputStream file) {
         DisassembledFile result = new DisassembledFile();
         result.addEnumNamer(this);
-        try(BytewiseReader reader = new BytewiseReader(new ByteArrayInputStream(file))) {
+        try(BytewiseReader reader = new BytewiseReader(file)) {
             reader.skip(4); // e_ident[EI_MAG0], e_ident[EI_MAG1], e_ident[EI_MAG2], e_ident[EI_MAG3]
             short EI_CLASS = reader.readUByte();
             result.addHeaderField("enum", "e_ident[EI_CLASS]", EI_CLASS);
@@ -482,7 +482,7 @@ public class ELFDisassembler extends Disassembler implements EnumNamer {
     }
 
 	@Override
-	public Node disassembleTree(byte[] file) {
+	public Node disassembleTree(InputStream file) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -2,6 +2,10 @@ package com.lightning.opendisasm.disasm.clazz;
 
 public interface JVMVersion {
 	;
+	
+	public static boolean supportsVersion(int code) {
+		return 45<=code&&code<=56;
+	}
 	public static String getVersionFromCode(int code) {
 		switch(code) {
 		case 45:

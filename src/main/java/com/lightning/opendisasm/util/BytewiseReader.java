@@ -4,7 +4,14 @@ import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
+
+import javax.xml.bind.helpers.ValidationEventImpl;
 
 public class BytewiseReader implements Closeable {
     private InputStream stream;
@@ -153,4 +160,15 @@ public class BytewiseReader implements Closeable {
 		return Float.intBitsToFloat(readInt());
 	}
 	
+	private <E extends Enum<E>> E valueOfIndex(Class<E> cl,int idx) {
+		E[] e = cl.getEnumConstants();
+		return e[idx];
+	}
+	
+	public <E extends Enum<E>> E readEnum8(Class<E> cl) throws IOException {
+		return valueOfIndex(cl,readUByte());
+	}
+	public <E extends Enum<E>> E readEnum16(Class<E> cl) throws IOException {
+		return valueOfIndex(cl,readUShort());
+	}
 }

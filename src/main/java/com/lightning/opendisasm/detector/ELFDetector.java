@@ -2,6 +2,7 @@ package com.lightning.opendisasm.detector;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.lightning.opendisasm.detector.Detector.DetectorBase;
 import com.lightning.opendisasm.disasm.Disassembler;
@@ -9,8 +10,8 @@ import com.lightning.opendisasm.disasm.ELFDisassembler;
 import com.lightning.opendisasm.util.BytewiseReader;
 
 public class ELFDetector extends DetectorBase {
-    public boolean detect(byte[] file) {
-        try (BytewiseReader reader = new BytewiseReader(new ByteArrayInputStream(file))) {
+    public boolean detect(InputStream file) {
+        try (BytewiseReader reader = new BytewiseReader(file)) {
             if(reader.readMagicInt(4)!=0x7f454C46) {
                 return false;
             }

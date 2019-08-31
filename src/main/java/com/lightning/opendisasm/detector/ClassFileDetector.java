@@ -1,12 +1,12 @@
 package com.lightning.opendisasm.detector;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.lightning.opendisasm.detector.Detector.DetectorBase;
 import com.lightning.opendisasm.disasm.Disassembler;
-import com.lightning.opendisasm.util.BytewiseReader;
+import com.lightning.opendisasm.disasm.clazz.ClassFileDisassembler;
 
 public class ClassFileDetector extends DetectorBase {
 	
@@ -17,8 +17,8 @@ public class ClassFileDetector extends DetectorBase {
 	}
 
 	@Override
-	public boolean detect(byte[] file) {
-		try (DataInputStream reader = new DataInputStream(new ByteArrayInputStream(file))){
+	public boolean detect(InputStream file) {
+		try (DataInputStream reader = new DataInputStream(file)){
 			if(reader.readInt()==CAFEBABE)
 				return true;
 			return false;
@@ -30,7 +30,7 @@ public class ClassFileDetector extends DetectorBase {
 	@Override
 	public Class<? extends Disassembler> getDisasm() {
 		// TODO Auto-generated method stub
-		return null;
+		return ClassFileDisassembler.class;
 	}
 
 }

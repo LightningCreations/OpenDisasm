@@ -1,5 +1,7 @@
 package com.lightning.opendisasm.disasm.clazz;
 
+import java.io.InputStream;
+
 import com.lightning.opendisasm.disasm.DisassembledFile;
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.tree.Node;
@@ -11,13 +13,13 @@ public class ClassFileDisassembler extends Disassembler {
 	}
 
 	@Override
-	public DisassembledFile disassemble(byte[] file) {
+	public DisassembledFile disassemble(InputStream file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Node disassembleTree(byte[] file) {
+	public Node disassembleTree(InputStream file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
