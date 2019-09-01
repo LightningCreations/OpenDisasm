@@ -1,17 +1,11 @@
 package com.lightning.opendisasm.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodHandles.Lookup;
-import java.lang.invoke.MethodType;
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
-
-import javax.xml.bind.helpers.ValidationEventImpl;
 
 public class BytewiseReader implements Closeable {
     private InputStream stream;
@@ -132,9 +126,13 @@ public class BytewiseReader implements Closeable {
 			}
 		}, NulTerminated {
 			@Override
-			byte[] readBytes(BytewiseReader in) {
-				// TODO Implement Reading Strings Terminated by a NUL (0x00) byte.
-				return null;
+			byte[] readBytes(BytewiseReader in) throws IOException {
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				byte b;
+				while((b = (byte)in.read())!=0)
+					out.write(b);
+				out.write(b);
+				return out.toByteArray();
 			}
 		};
     	
