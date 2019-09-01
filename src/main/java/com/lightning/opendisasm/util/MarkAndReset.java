@@ -6,6 +6,7 @@ import java.io.InputStream;
 public final class MarkAndReset implements AutoCloseable {
 	private InputStream strm;
 	public MarkAndReset(InputStream strm,int limit) {
+	    this.strm = strm;
 		strm.mark(limit);
 	}
 
@@ -13,5 +14,4 @@ public final class MarkAndReset implements AutoCloseable {
 	public void close() throws IOException {
 		strm.reset();
 	}
-
 }

@@ -50,8 +50,6 @@ public class CLIMain {
             System.exit(1);
         }
         LOGGER.trace("Done with command line parsing.");
-
-        LOGGER.trace("Grabbing file into byte[] for easier manipulation...");
         FileInputStream inputFile = null;
         try {
             inputFile = new FileInputStream(new File(cmd.getArgList().get(0)));
@@ -59,18 +57,10 @@ public class CLIMain {
             LOGGER.fatal("Couldn't load file: " + e.getLocalizedMessage());
             System.exit(1);
         }
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try {
-            IOUtils.copy(inputFile, output);
-        } catch (IOException e) {
-            LOGGER.fatal("Couldn't load file: " + e.getLocalizedMessage());
-            System.exit(1);
-        }
-        byte[] file = output.toByteArray();
         LOGGER.trace("Done converting file.");
 
         LOGGER.trace("Determining disassembler...");
-        Class<? extends Disassembler> disassemblerClass = Detector.getDisasmFor(file);
+        Class<? extends Disassembler> disassemblerClass = Detector.getDisasmFor(inputFile);
         LOGGER.debug("Disassembler determined as " + disassemblerClass.getName());
 
         LOGGER.trace("Instantiating disassembler...");
@@ -84,7 +74,13 @@ public class CLIMain {
         LOGGER.trace("Disassembler created.");
         
         LOGGER.info("Disassembling...");
-        DisassembledFile result = disassembler.disassemble(file);
+        try {
+            inputFile = new FileInputStream(new File(cmd.getArgList().get(0)));
+        } catch (FileNotFoundException e) {
+            LOGGER.fatal("Couldn't load file pass 2: " + e.getLocalizedMessage());
+            System.exit(1);
+        }
+        DisassembledFile result = disassembler.disassemble(inputFile);
         LOGGER.trace("Done disassembling");
         LOGGER.info("Result:\n" + result.toString());
         BufferedWriter printer = new BufferedWriter(new FileWriter("result.txt"));
