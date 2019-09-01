@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Supplier;
 
-import com.lightning.opendisasm.detector.Detector.DetectorBase;
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.disasm.ELFDisassembler;
 import com.lightning.opendisasm.util.BytewiseReader;

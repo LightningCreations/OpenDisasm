@@ -14,12 +14,6 @@ import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.MarkAndReset;
 
 public class Detector {
-    public static abstract class DetectorBase {
-        public abstract boolean detect(InputStream file);
-        
-        public abstract Supplier<? extends Disassembler> getDisasm();
-    }
-    
     public static DisassembledFile diassembleStream(InputStream file) {
     	if(!file.markSupported())
     		return diassembleStream(new BufferedInputStream(file));
