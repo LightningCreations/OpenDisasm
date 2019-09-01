@@ -48,6 +48,8 @@ public class Detector {
 			// TODO Auto-generated method stub
 			return false;
 		}
+		
+		public void close() throws IOException{}
     	
     }
     
