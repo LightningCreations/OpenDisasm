@@ -1,0 +1,2 @@
+com.lightning.opendiasm.detector.ELFDetector # ELF Binaries
+com.lightning.opendiasm.detector.ClassFileDetector # Class Files

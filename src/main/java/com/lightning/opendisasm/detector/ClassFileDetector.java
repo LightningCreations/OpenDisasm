@@ -3,6 +3,7 @@ package com.lightning.opendisasm.detector;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Supplier;
 
 import com.lightning.opendisasm.detector.Detector.DetectorBase;
 import com.lightning.opendisasm.disasm.Disassembler;
@@ -28,9 +29,9 @@ public class ClassFileDetector extends DetectorBase {
 	}
 
 	@Override
-	public Class<? extends Disassembler> getDisasm() {
+	public Supplier<? extends Disassembler> getDisasm() {
 		// TODO Auto-generated method stub
-		return ClassFileDisassembler.class;
+		return ClassFileDisassembler::new;
 	}
 
 }

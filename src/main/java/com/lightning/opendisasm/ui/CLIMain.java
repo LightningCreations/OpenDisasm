@@ -57,30 +57,12 @@ public class CLIMain {
             LOGGER.fatal("Couldn't load file: " + e.getLocalizedMessage());
             System.exit(1);
         }
-        LOGGER.trace("Done converting file.");
-
-        LOGGER.trace("Determining disassembler...");
-        Class<? extends Disassembler> disassemblerClass = Detector.getDisasmFor(inputFile);
-        LOGGER.debug("Disassembler determined as " + disassemblerClass.getName());
-
-        LOGGER.trace("Instantiating disassembler...");
-        Disassembler disassembler = null;
-        try {
-            disassembler = disassemblerClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            LOGGER.fatal("Some idiot (most likely me) messed up the constructors...");
-            System.exit(1);
-        }
-        LOGGER.trace("Disassembler created.");
         
-        LOGGER.info("Disassembling...");
-        try {
-            inputFile = new FileInputStream(new File(cmd.getArgList().get(0)));
-        } catch (FileNotFoundException e) {
-            LOGGER.fatal("Couldn't load file pass 2: " + e.getLocalizedMessage());
-            System.exit(1);
+        DisassembledFile result = Detector.diassembleStream(inputFile);
+        if(result==null) {
+        	LOGGER.error("No detector available that understands the input file");
+        	System.exit(1);
         }
-        DisassembledFile result = disassembler.disassemble(inputFile);
         LOGGER.trace("Done disassembling");
         LOGGER.info("Result:\n" + result.toString());
         BufferedWriter printer = new BufferedWriter(new FileWriter("result.txt"));
