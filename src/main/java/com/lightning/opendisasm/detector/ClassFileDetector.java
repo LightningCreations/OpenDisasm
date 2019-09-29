@@ -33,4 +33,10 @@ public class ClassFileDetector extends DetectorBase {
 		return ClassFileDisassembler::new;
 	}
 
+	@Override
+	public boolean handles(String targetName) {
+		// TODO Auto-generated method stub
+		return targetName.equalsIgnoreCase("class");
+	}
+
 }

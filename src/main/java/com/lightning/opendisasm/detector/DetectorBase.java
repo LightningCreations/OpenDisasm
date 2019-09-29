@@ -8,5 +8,7 @@ import com.lightning.opendisasm.disasm.Disassembler;
 public abstract class DetectorBase {
     public abstract boolean detect(InputStream file);
     
+    public abstract boolean handles(String targetName);
+    
     public abstract Supplier<? extends Disassembler> getDisasm();
 }

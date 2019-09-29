@@ -26,4 +26,8 @@ public class ELFDetector extends DetectorBase {
     public Supplier<? extends Disassembler> getDisasm() {
         return ELFDisassembler::new;
     }
+    
+    public boolean handles(String target) {
+    	return target.equals("elf");
+    }
 }

@@ -68,4 +68,11 @@ public class Detector {
         }
         return null;
     }
+    
+    public static Supplier<? extends Disassembler> getTransformerFor(String target){
+    	for(DetectorBase detector:ServiceLoader.load(DetectorBase.class))
+    		if(detector.handles(target))
+    			return detector.getDisasm();
+    	return null;
+    }
 }
