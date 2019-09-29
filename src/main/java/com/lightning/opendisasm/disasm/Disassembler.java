@@ -6,6 +6,8 @@ import com.lightning.opendisasm.tree.Node;
 
 public abstract class Disassembler {
 	@Deprecated
-    public abstract DisassembledFile disassemble(InputStream file);
+    public DisassembledFile disassemble(InputStream file) {
+		return null;
+	}
     public abstract Node disassembleTree(InputStream file);
 }
