@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Represents a statically layed out form for storing a dissasembled file.
+ * This has been superseeded by the Node layout of dissasembled files
+ * @author chorm
+ * @deprecated This has been superseeded as noted above by Node.
+ */
 public class DisassembledFile {
     private ArrayList<EnumNamer> namers;
     
