@@ -7,10 +7,10 @@ import com.lightning.opendisasm.tree.OctetStreamNode;
 import com.lightning.opendisasm.tree.TransformerNode;
 
 public abstract class Disassembler {
-	@Deprecated
+    @Deprecated
     public DisassembledFile disassemble(InputStream file) {
-		return null;
-	}
+        return null;
+    }
     public abstract Node disassembleTree(InputStream file);
     
     public void applyTo(TransformerNode node) {
