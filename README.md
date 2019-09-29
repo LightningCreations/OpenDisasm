@@ -13,7 +13,10 @@ Supported targets:
 | DEFLATE | Compression format  | WIP    |
 | ELF     | Container           | WIP    |
 | NBT     | Data storage        | WIP    |
+| ShadeNBT| Data storage        | WIP    |
 | PE      | Container           | WIP    |
 | SWF     | Container           | WIP    |
 | x86_64  | Executed program    | WIP    |
 | ZLib    | Container           | WIP    |
+| CIL     | Executed program    | WIP    |
+| WASM    | Executed program    | WIP    |
