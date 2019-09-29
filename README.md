@@ -7,12 +7,13 @@ Supported targets:
 
 | Name    | Type                | Status |
 |---------|---------------------|--------|
-| SWF     | Container           | WIP    |
-| ZLib    | Container           | WIP    |
-| DEFLATE | Compression format  | WIP    |
 | class   | Container/Program   | WIP    |
-| ELF     | Container           | WIP    |
 | COFF    | Container           | WIP    |
-| PE      | Container           | WIP    |
 | COM     | Container           | WIP    |
+| DEFLATE | Compression format  | WIP    |
+| ELF     | Container           | WIP    |
+| NBT     | Data storage        | WIP    |
+| PE      | Container           | WIP    |
+| SWF     | Container           | WIP    |
 | x86_64  | Executed program    | WIP    |
+| ZLib    | Container           | WIP    |
