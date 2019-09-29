@@ -166,7 +166,10 @@ public class BytewiseReader implements Closeable {
 	public <E extends Enum<E>> E readEnum8(Class<E> cl) throws IOException {
 		return valueOfIndex(cl,readUByte());
 	}
-	public <E extends Enum<E>> E readEnum16(Class<E> cl) throws IOException {
-		return valueOfIndex(cl,readUShort());
-	}
+    public <E extends Enum<E>> E readEnum16(Class<E> cl) throws IOException {
+        return valueOfIndex(cl,readUShort());
+    }
+    public <E extends Enum<E>> E readEnum32(Class<E> cl) throws IOException {
+        return valueOfIndex(cl,(int)readUInt());
+    }
 }
