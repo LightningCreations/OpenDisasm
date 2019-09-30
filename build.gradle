@@ -13,12 +13,25 @@ targetCompatibility = 1.8
 
 
 
-repositories {   
-     mavenCentral()
+repositories {
+	mavenLocal()
+	maven {
+		url = "https://lightningcreations.github.io/Maven"
+	}
+	jcenter()
+    mavenCentral()
 }
 
 dependencies {
 	compile 'org.apache.logging.log4j:log4j-core:2.11.2'
 	compile 'commons-io:commons-io:2.6'
 	compile 'commons-cli:commons-cli:1.4'
+}
+
+jar {
+	manifest {
+		attributes (
+			'Automatic-Module-Name': 'com.lightning.opendisasm'
+		)
+	}
 }

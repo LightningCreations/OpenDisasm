@@ -25,7 +25,7 @@ public class TransformerNode implements Node {
 	@Override
 	public Node getParent() {
 		// TODO Auto-generated method stub
-		return null;
+		return parent;
 	}
 	
 	public Node getChild() {
@@ -35,6 +35,7 @@ public class TransformerNode implements Node {
 	public void replaceChild(Node node) {
 		this.child = node;
 	}
+	
 	
 	public void transform() {
 		Detector.getTransformerFor(target).get().applyTo(this);
