@@ -1,9 +1,9 @@
 package com.lightning.opendisasm.disasm.clazz.node.attribute;
 
-import com.lightning.opendisasm.disasm.clazz.node.AbstractNode;
+import com.lightning.opendisasm.disasm.clazz.node.AbstractEntityNode;
 import com.lightning.opendisasm.disasm.clazz.node.EntityNode;
 
-public abstract class AttributeNode extends AbstractNode {
+public abstract class AttributeNode extends AbstractEntityNode {
 
 	
 	private String attributeKind;

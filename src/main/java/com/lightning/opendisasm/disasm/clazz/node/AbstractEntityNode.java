@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.lightning.opendisasm.tree.Node;
 
-public abstract class AbstractNode implements EntityNode {
+public abstract class AbstractEntityNode implements EntityNode {
 	
 	private final String name;
 	private final int modifiers;
@@ -18,7 +18,7 @@ public abstract class AbstractNode implements EntityNode {
 		children.add(child);
 	}
 	
-	public AbstractNode(String name, int modifiers, EntityNode parent) {
+	public AbstractEntityNode(String name, int modifiers, EntityNode parent) {
 		this.name = name;
 		this.modifiers = modifiers;
 		this.parent = parent;

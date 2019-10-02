@@ -23,7 +23,7 @@ public class Detector {
     public static Node diassembleTreeFromStream(InputStream file) {
     	if(!file.markSupported())
     		return diassembleTreeFromStream(new BufferedInputStream(file));
-    	 return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassembleTree(file)).orElse(null);
+    	return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassembleTree(file)).orElse(null);
     }
     
     private static class UnbreakMarkAndResetInputStream extends FilterInputStream{

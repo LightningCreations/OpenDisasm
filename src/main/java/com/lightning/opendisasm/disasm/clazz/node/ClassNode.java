@@ -1,8 +1,8 @@
 package com.lightning.opendisasm.disasm.clazz.node;
 
-public class ClassNode extends AbstractNode {
+public class ClassNode extends AbstractEntityNode {
 	
-	public static final class InnerClassNode extends AbstractNode{
+	public static final class InnerClassNode extends AbstractEntityNode{
 
 		public InnerClassNode(String name, int modifiers, ClassNode parent) {
 			super(name, modifiers, parent);
