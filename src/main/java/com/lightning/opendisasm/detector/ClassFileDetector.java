@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.disasm.clazz.ClassFileDisassembler;
 
+import javax.annotation.Nonnull;
+
 public class ClassFileDetector extends DetectorBase {
 	
 	private static final int CAFEBABE = 0xCAFEBABE;
@@ -27,6 +29,7 @@ public class ClassFileDetector extends DetectorBase {
 		}
 	}
 
+	@Nonnull
 	@Override
 	public Supplier<? extends Disassembler> getDisasm() {
 		// TODO Auto-generated method stub

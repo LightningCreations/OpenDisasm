@@ -6,12 +6,15 @@ import java.util.Collections;
 import java.util.List;
 
 import com.lightning.opendisasm.util.BytewiseReader;
+import org.graalvm.compiler.api.replacements.Snippet;
+
+import javax.annotation.Nonnull;
 
 public final class OctetStreamNode implements Node {
 	private byte[] data;
 	private final Node parent;
 	
-	public OctetStreamNode(byte[] data,Node parent) {
+	public OctetStreamNode(@Nonnull byte[] data,@Nonnull Node parent) {
 		this.data = data;
 		this.parent = parent;
 	}
