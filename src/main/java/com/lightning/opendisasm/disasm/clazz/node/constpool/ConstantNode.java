@@ -7,6 +7,8 @@ import java.util.List;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
 
+import javax.annotation.Nonnull;
+
 public class ConstantNode implements Node {
 	
 	private ConstantPoolNode parent;
@@ -30,11 +32,18 @@ public class ConstantNode implements Node {
 		return parent;
 	}
 
+	@Nonnull
 	@Override
 	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub
 		return Collections.emptyList();
 	}
+
+	@Override
+	public String getName() {
+		return tag.toString();
+	}
+
 	public ConstantType getType(){
 		return tag;
 	}

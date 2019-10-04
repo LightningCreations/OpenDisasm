@@ -2,7 +2,6 @@ package com.lightning.opendisasm.tests;
 
 import com.lightning.opendisasm.detector.Detector;
 import com.lightning.opendisasm.tree.Node;
-import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.lang.instrument.ClassDefinition;

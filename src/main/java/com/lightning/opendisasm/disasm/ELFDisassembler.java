@@ -7,7 +7,7 @@ import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
 
 public class ELFDisassembler extends Disassembler implements EnumNamer {
-    public class ProgramHeaderEntry {
+    public class ProgramHeaderEntry { // Why is this non-static again?
         public long p_type; // All fields are long to reduce chance of integer overflow
         public long p_flags;
         public long p_offset;
@@ -121,7 +121,7 @@ public class ELFDisassembler extends Disassembler implements EnumNamer {
         }
     }
     
-    public class SectionHeaderEntry {
+    public class SectionHeaderEntry { //Same Here
         public long sh_name; // All fields are long to reduce chance of integer overflow
         public long sh_type;
         public long sh_flags;

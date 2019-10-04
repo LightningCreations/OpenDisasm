@@ -5,13 +5,12 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import com.lightning.opendisasm.util.BytewiseReader;
-import org.graalvm.compiler.api.replacements.Snippet;
+
 
 import javax.annotation.Nonnull;
 
 public final class OctetStreamNode implements Node {
-	private byte[] data;
+	private final byte[] data;
 	private final Node parent;
 	
 	public OctetStreamNode(@Nonnull byte[] data,@Nonnull Node parent) {
@@ -29,6 +28,7 @@ public final class OctetStreamNode implements Node {
 		return new ByteArrayInputStream(data);
 	}
 
+	@Nonnull
 	@Override
 	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub

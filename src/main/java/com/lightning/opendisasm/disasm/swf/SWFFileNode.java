@@ -7,6 +7,8 @@ import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.tree.ValueNode;
 import com.lightning.opendisasm.util.BytewiseReader;
 
+import javax.annotation.Nonnull;
+
 public class SWFFileNode implements Node {
     public ArrayList<ValueNode> children;
     
@@ -18,7 +20,13 @@ public class SWFFileNode implements Node {
         return null;
     }
     
+    @Nonnull
     public List<? extends Node> getChildren() {
         return children;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

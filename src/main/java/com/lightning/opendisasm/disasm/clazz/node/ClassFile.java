@@ -11,6 +11,8 @@ import com.lightning.opendisasm.tree.MetadataNode;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
 
+import javax.annotation.Nonnull;
+
 public class ClassFile implements Node {
 	public static void throwParserError(String msg) {
 		throw new RuntimeException(msg);
@@ -43,6 +45,7 @@ public class ClassFile implements Node {
 			return file;
 		}
 
+		@Nonnull
 		@Override
 		public List<? extends Node> getChildren() {
 			// TODO Auto-generated method stub
@@ -73,6 +76,7 @@ public class ClassFile implements Node {
 		return null;
 	}
 
+	@Nonnull
 	@Override
 	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub

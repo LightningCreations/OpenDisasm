@@ -1,7 +1,6 @@
 package com.lightning.opendisasm.ui;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,13 +12,11 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.lightning.opendisasm.detector.Detector;
 import com.lightning.opendisasm.disasm.DisassembledFile;
-import com.lightning.opendisasm.disasm.Disassembler;
 
 public class CLIMain {
     private static final Logger LOGGER = LogManager.getLogger(CLIMain.class);

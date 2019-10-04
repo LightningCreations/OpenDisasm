@@ -22,7 +22,7 @@ public abstract class ConstantType {
 	
 	public static final ConstantType CONST_Utf8 = new ConstantTypeUtf8();
 	
-	public static final class ConstantTypeUtf8 extends ConstantType{
+	private static final class ConstantTypeUtf8 extends ConstantType{
 
 		private ConstantTypeUtf8() {
 			super(1, "utf8",45);

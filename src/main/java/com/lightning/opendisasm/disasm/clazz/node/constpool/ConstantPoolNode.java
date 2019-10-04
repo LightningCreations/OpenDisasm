@@ -8,6 +8,8 @@ import com.lightning.opendisasm.disasm.clazz.node.ClassFile;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
 
+import javax.annotation.Nonnull;
+
 public final class ConstantPoolNode implements Node {
 	private ClassFile file;
 	private List<ConstantNode> constants;
@@ -38,10 +40,16 @@ public final class ConstantPoolNode implements Node {
 			return throwConstantError(String.format("Bad type for constant %d. Expected %s, got %s", idx,type,tgt.getType()));
 	}
 
+	@Nonnull
 	@Override
 	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub
 		return constants;
+	}
+
+	@Override
+	public String getName() {
+		return "Class Constant Pool";
 	}
 
 }

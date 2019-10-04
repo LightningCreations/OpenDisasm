@@ -8,9 +8,11 @@ import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.disasm.clazz.SWFDisassembler;
 import com.lightning.opendisasm.util.BytewiseReader;
 
+import javax.annotation.Nonnull;
+
 public class SWFDetector extends DetectorBase {
     @Override
-    public boolean detect(InputStream file) {
+    public boolean detect(@Nonnull InputStream file) {
         try (BytewiseReader reader = new BytewiseReader(file)) {
             char sig1 = (char)reader.readUByte();
             if(sig1 != 'F' && sig1 != 'C' && sig1 != 'Z') return false;
@@ -27,10 +29,11 @@ public class SWFDetector extends DetectorBase {
     }
 
     @Override
-    public boolean handles(String targetName) {
+    public boolean handles(@Nonnull String targetName) {
         return targetName.equals("swf");
     }
 
+    @Nonnull
     @Override
     public Supplier<? extends Disassembler> getDisasm() {
         return SWFDisassembler::new;

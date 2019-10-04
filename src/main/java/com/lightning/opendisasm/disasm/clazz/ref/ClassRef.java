@@ -2,7 +2,7 @@ package com.lightning.opendisasm.disasm.clazz.ref;
 
 public class ClassRef {
 	
-	private String cl;
+	private final String cl;
 	
 	public ClassRef(String cl) {
 		this.cl = cl;

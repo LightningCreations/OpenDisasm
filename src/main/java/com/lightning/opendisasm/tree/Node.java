@@ -1,6 +1,6 @@
 package com.lightning.opendisasm.tree;
 
-import jdk.internal.jline.internal.Nullable;
+import javax.annotation.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.List;

@@ -19,7 +19,7 @@ public class ClassFileDetector extends DetectorBase {
 	}
 
 	@Override
-	public boolean detect(InputStream file) {
+	public boolean detect(@Nonnull InputStream file) {
 		try (DataInputStream reader = new DataInputStream(file)){
 			if(reader.readInt()==CAFEBABE)
 				return true;
@@ -37,7 +37,7 @@ public class ClassFileDetector extends DetectorBase {
 	}
 
 	@Override
-	public boolean handles(String targetName) {
+	public boolean handles(@Nonnull String targetName) {
 		// TODO Auto-generated method stub
 		return targetName.equalsIgnoreCase("class");
 	}

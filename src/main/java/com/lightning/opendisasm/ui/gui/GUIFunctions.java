@@ -30,6 +30,7 @@ public class GUIFunctions {
         aboutFrame.setVisible(true);
         try {
             aboutFrame.setSelected(true);
+            //IntelliJ wants to know why this is empty
         } catch (PropertyVetoException e) {}
     }
     
@@ -39,6 +40,7 @@ public class GUIFunctions {
         treeViewFrame.setTree(tree);
         try {
             treeViewFrame.setSelected(true);
+            //IntelliJ wants to know why this is empty
         } catch (PropertyVetoException e) {}
     }
     

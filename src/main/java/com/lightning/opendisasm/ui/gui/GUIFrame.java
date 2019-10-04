@@ -70,6 +70,7 @@ public class GUIFrame extends JFrame {
         
         JMenuItem fileExit = new JMenuItem("Quit");
         fileExit.setMnemonic(KeyEvent.VK_Q);
+        //Lambdafy this
         fileExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cleanup();
@@ -83,6 +84,7 @@ public class GUIFrame extends JFrame {
         helpMenu.setMnemonic(KeyEvent.VK_H);
         
         JMenuItem helpVersion = new JMenuItem("About...");
+        //Lambdafy this
         helpVersion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openAbout();

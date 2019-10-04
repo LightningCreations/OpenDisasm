@@ -2,7 +2,6 @@ package com.lightning.opendisasm.disasm.clazz;
 
 import java.io.InputStream;
 
-import com.lightning.opendisasm.disasm.DisassembledFile;
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.disasm.clazz.node.ClassFile;
 import com.lightning.opendisasm.tree.Node;

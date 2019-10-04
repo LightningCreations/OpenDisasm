@@ -7,6 +7,8 @@ import java.util.List;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
 
+import javax.annotation.Nonnull;
+
 public abstract class AbstractEntityNode implements EntityNode {
 	private final String name;
 	private final int modifiers;
@@ -43,7 +45,8 @@ public abstract class AbstractEntityNode implements EntityNode {
 		return modifiers;
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub
 		return Collections.unmodifiableList(children);
