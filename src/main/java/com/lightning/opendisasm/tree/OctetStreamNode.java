@@ -35,4 +35,9 @@ public final class OctetStreamNode implements Node {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public String getName() {
+		return "(raw bytes)";
+	}
+
 }

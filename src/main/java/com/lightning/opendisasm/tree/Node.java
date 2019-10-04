@@ -17,4 +17,6 @@ public interface Node {
 	 * For all Children c of this node, c.getParent().equals(this) shall be true.
 	 */
 	public @Nonnull List<? extends Node> getChildren();
+
+	public String getName();
 }

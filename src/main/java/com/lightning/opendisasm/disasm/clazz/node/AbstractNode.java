@@ -5,20 +5,21 @@ import java.util.Collections;
 import java.util.List;
 
 import com.lightning.opendisasm.tree.Node;
+import com.lightning.opendisasm.util.BytewiseReader;
 
 public abstract class AbstractNode implements EntityNode {
 	
 	private final String name;
 	private final int modifiers;
-	private final EntityNode parent;
+	private final Node parent;
 	private final List<EntityNode> children;
 	
-	protected void addChild(EntityNode child) {
+	protected final void addChild(EntityNode child) {
 		assert child.getParent()==this;
 		children.add(child);
 	}
 	
-	public AbstractNode(String name, int modifiers, EntityNode parent) {
+	public AbstractNode(String name, int modifiers, Node parent, BytewiseReader reader) {
 		this.name = name;
 		this.modifiers = modifiers;
 		this.parent = parent;
@@ -32,7 +33,7 @@ public abstract class AbstractNode implements EntityNode {
 	}
 
 	@Override
-	public EntityNode getParent() {
+	public Node getParent() {
 		// TODO Auto-generated method stub
 		return parent;
 	}

@@ -54,4 +54,9 @@ public class TransformerNode implements Node {
 		return Collections.singletonList(child);
 	}
 
+	@Override
+	public String getName() {
+		return "(transformer)";
+	}
+
 }
