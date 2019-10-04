@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.lightning.opendisasm.disasm.clazz.JVMVersion;
 import com.lightning.opendisasm.disasm.clazz.node.constpool.ConstantPoolNode;
 import com.lightning.opendisasm.tree.MetadataNode;
 import com.lightning.opendisasm.tree.Node;
@@ -49,6 +50,11 @@ public class ClassFile implements Node {
 		}
 
 		@Override
+		public String getName() {
+			return JVMVersion.getVersionFromCode(major);
+		}
+
+		@Override
 		public String getTagName() {
 			// TODO Auto-generated method stub
 			return "Java Version";
@@ -71,6 +77,11 @@ public class ClassFile implements Node {
 	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub
 		return Arrays.asList(pool,node);
+	}
+
+	@Override
+	public String getName() {
+		return "(disassembled class file)";
 	}
 
 }

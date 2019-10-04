@@ -13,14 +13,16 @@ import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.MarkAndReset;
 
+import javax.annotation.Nullable;
+
 public class Detector {
-    public static DisassembledFile diassembleStream(InputStream file) {
+    public @Nullable static DisassembledFile diassembleStream(InputStream file) {
     	if(!file.markSupported())
     		return diassembleStream(new BufferedInputStream(file));
     	 return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassemble(file)).orElse(null);
     }
     
-    public static Node diassembleTreeFromStream(InputStream file) {
+    public @Nullable static Node diassembleTreeFromStream(InputStream file) {
     	if(!file.markSupported())
     		return diassembleTreeFromStream(new BufferedInputStream(file));
     	return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassembleTree(file)).orElse(null);
@@ -28,7 +30,7 @@ public class Detector {
     
     private static class UnbreakMarkAndResetInputStream extends FilterInputStream{
 
-		protected UnbreakMarkAndResetInputStream(InputStream in) {
+		UnbreakMarkAndResetInputStream(InputStream in) {
 			super(in);
 			// TODO Auto-generated constructor stub
 		}
@@ -49,7 +51,7 @@ public class Detector {
 			return false;
 		}
 		
-		public void close() throws IOException{}
+		public void close(){}
     	
     }
     

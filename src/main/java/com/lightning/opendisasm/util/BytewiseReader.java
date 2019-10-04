@@ -1,5 +1,7 @@
 package com.lightning.opendisasm.util;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.EOFException;
@@ -7,12 +9,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
+@ParametersAreNonnullByDefault
 public class BytewiseReader implements Closeable {
     private InputStream stream;
     private boolean bigEndian;
     private long pos;
     
-    public byte[] readBytes(int len) throws IOException {
+    public @Nonnull byte[] readBytes(int len) throws IOException {
     	byte[] ret = new byte[len];
     	if(stream.read(ret)!=len)
     		throw new EOFException("Unexpected End of Stream");
@@ -76,15 +79,15 @@ public class BytewiseReader implements Closeable {
     
     public long readULong() throws IOException {
         if(bigEndian) {
-            return  ((0x00FF & read()) << 56L) + ((0x00FF & read()) << 48L) +
-                    ((0x00FF & read()) << 40L) + ((0x00FF & read()) << 32L) +
-                    ((0x00FF & read()) << 24L) + ((0x00FF & read()) << 16L) +
-                    ((0x00FF & read()) <<  8L) + ((0x00FF & read())       );
+            return  ((0x00FFL & read()) << 56L) + ((0x00FFL & read()) << 48L) +
+                    ((0x00FFL & read()) << 40L) + ((0x00FFL & read()) << 32L) +
+                    ((0x00FFL & read()) << 24L) + ((0x00FFL & read()) << 16L) +
+                    ((0x00FFL & read()) <<  8L) + ((0x00FFL & read())       );
         } else {
-            return  ((0x00FF & read())       ) + ((0x00FF & read()) << 8L ) +
-                    ((0x00FF & read()) << 16L) + ((0x00FF & read()) << 24L) +
-                    ((0x00FF & read()) << 32L) + ((0x00FF & read()) << 40L) +
-                    ((0x00FF & read()) << 48L) + ((0x00FF & read()) << 56L);
+            return  ((0x00FFL & read())       ) + ((0x00FFL & read()) << 8L ) +
+                    ((0x00FFL & read()) << 16L) + ((0x00FFL & read()) << 24L) +
+                    ((0x00FFL & read()) << 32L) + ((0x00FFL & read()) << 40L) +
+                    ((0x00FFL & read()) << 48L) + ((0x00FFL & read()) << 56L);
         }
     }
     
@@ -139,12 +142,13 @@ public class BytewiseReader implements Closeable {
     	abstract byte[] readBytes(BytewiseReader in)throws IOException;
     }
 
-	public String readString(Charset set) throws IOException {
+	public @Nonnull
+    String readString(Charset set) throws IOException {
 		// TODO Auto-generated method stub
 		return readString(set,StringType.LengthPrefixed);
 	}
 
-	public String readString(Charset set, StringType type) throws IOException {
+	public @Nonnull String readString(Charset set, StringType type) throws IOException {
 		byte[] bytes = type.readBytes(this);
 		return new String(bytes,set);
 	}
@@ -163,13 +167,13 @@ public class BytewiseReader implements Closeable {
 		return e[idx];
 	}
 	
-	public <E extends Enum<E>> E readEnum8(Class<E> cl) throws IOException {
+	public @Nonnull <E extends Enum<E>> E readEnum8(Class<E> cl) throws IOException {
 		return valueOfIndex(cl,readUByte());
 	}
-    public <E extends Enum<E>> E readEnum16(Class<E> cl) throws IOException {
+    public @Nonnull <E extends Enum<E>> E readEnum16(Class<E> cl) throws IOException {
         return valueOfIndex(cl,readUShort());
     }
-    public <E extends Enum<E>> E readEnum32(Class<E> cl) throws IOException {
+    public @Nonnull <E extends Enum<E>> E readEnum32(Class<E> cl) throws IOException {
         return valueOfIndex(cl,(int)readUInt());
     }
 }

@@ -9,6 +9,8 @@ import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.disasm.ELFDisassembler;
 import com.lightning.opendisasm.util.BytewiseReader;
 
+import javax.annotation.Nonnull;
+
 public class ELFDetector extends DetectorBase {
     public boolean detect(InputStream file) {
         try (BytewiseReader reader = new BytewiseReader(file)) {
@@ -23,6 +25,7 @@ public class ELFDetector extends DetectorBase {
         }
     }
 
+    @Nonnull
     public Supplier<? extends Disassembler> getDisasm() {
         return ELFDisassembler::new;
     }
