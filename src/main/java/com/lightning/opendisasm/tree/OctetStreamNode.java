@@ -1,5 +1,7 @@
 package com.lightning.opendisasm.tree;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Collections;
@@ -7,13 +9,12 @@ import java.util.List;
 
 
 
-import javax.annotation.Nonnull;
 
 public final class OctetStreamNode implements Node {
 	private final byte[] data;
 	private final Node parent;
 	
-	public OctetStreamNode(@Nonnull byte[] data,@Nonnull Node parent) {
+	public OctetStreamNode(@NonNull byte[] data, @NonNull Node parent) {
 		this.data = data;
 		this.parent = parent;
 	}
@@ -28,9 +29,9 @@ public final class OctetStreamNode implements Node {
 		return new ByteArrayInputStream(data);
 	}
 
-	@Nonnull
+	@NonNull
 	@Override
-	public List<? extends Node> getChildren() {
+	public List<? extends @NonNull Node> getChildren() {
 		// TODO Auto-generated method stub
 		return Collections.emptyList();
 	}

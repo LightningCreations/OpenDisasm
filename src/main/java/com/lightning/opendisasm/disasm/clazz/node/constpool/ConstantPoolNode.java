@@ -7,14 +7,13 @@ import java.util.List;
 import com.lightning.opendisasm.disasm.clazz.node.ClassFile;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
-
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class ConstantPoolNode implements Node {
 	private ClassFile file;
 	private List<ConstantNode> constants;
 	
-	public static <T> T throwConstantError(String msg) {
+	public static <T> @NonNull T throwConstantError(String msg) {
 		throw new RuntimeException(msg);
 	}
 	
@@ -40,9 +39,9 @@ public final class ConstantPoolNode implements Node {
 			return throwConstantError(String.format("Bad type for constant %d. Expected %s, got %s", idx,type,tgt.getType()));
 	}
 
-	@Nonnull
+	@NonNull
 	@Override
-	public List<? extends Node> getChildren() {
+	public List<? extends @NonNull Node> getChildren() {
 		// TODO Auto-generated method stub
 		return constants;
 	}

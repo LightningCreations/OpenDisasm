@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.disasm.clazz.ClassFileDisassembler;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 public class ClassFileDetector extends DetectorBase {
 	
@@ -19,7 +19,7 @@ public class ClassFileDetector extends DetectorBase {
 	}
 
 	@Override
-	public boolean detect(@Nonnull InputStream file) {
+	public boolean detect(@NonNull InputStream file) {
 		try (DataInputStream reader = new DataInputStream(file)){
 			if(reader.readInt()==CAFEBABE)
 				return true;
@@ -29,7 +29,7 @@ public class ClassFileDetector extends DetectorBase {
 		}
 	}
 
-	@Nonnull
+	@NonNull
 	@Override
 	public Supplier<? extends Disassembler> getDisasm() {
 		// TODO Auto-generated method stub
@@ -37,7 +37,7 @@ public class ClassFileDetector extends DetectorBase {
 	}
 
 	@Override
-	public boolean handles(@Nonnull String targetName) {
+	public boolean handles(@NonNull String targetName) {
 		// TODO Auto-generated method stub
 		return targetName.equalsIgnoreCase("class");
 	}

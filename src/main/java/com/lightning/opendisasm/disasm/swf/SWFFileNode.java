@@ -6,8 +6,8 @@ import java.util.List;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.tree.ValueNode;
 import com.lightning.opendisasm.util.BytewiseReader;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 public class SWFFileNode implements Node {
     public ArrayList<ValueNode> children;
@@ -19,9 +19,9 @@ public class SWFFileNode implements Node {
     public Node getParent() {
         return null;
     }
-    
-    @Nonnull
-    public List<? extends Node> getChildren() {
+
+    @NonNull
+    public List<? extends @NonNull Node> getChildren() {
         return children;
     }
 

@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 public class ConstantNode implements Node {
 	
@@ -32,9 +32,9 @@ public class ConstantNode implements Node {
 		return parent;
 	}
 
-	@Nonnull
+	@NonNull
 	@Override
-	public List<? extends Node> getChildren() {
+	public List<? extends @NonNull Node> getChildren() {
 		// TODO Auto-generated method stub
 		return Collections.emptyList();
 	}

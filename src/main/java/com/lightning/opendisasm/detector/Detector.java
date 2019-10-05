@@ -12,11 +12,11 @@ import com.lightning.opendisasm.disasm.DisassembledFile;
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.MarkAndReset;
-
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Detector {
-    public @Nullable static DisassembledFile diassembleStream(InputStream file) {
+    public @Nullable
+	static DisassembledFile diassembleStream(InputStream file) {
     	if(!file.markSupported())
     		return diassembleStream(new BufferedInputStream(file));
     	 return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassemble(file)).orElse(null);

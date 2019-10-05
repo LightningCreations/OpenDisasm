@@ -1,11 +1,13 @@
 package com.lightning.opendisasm.disasm.clazz;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public interface JVMVersion {
 	
 	public static boolean supportsVersion(int code) {
 		return 45<=code&&code<=56;
 	}
-	public static String getVersionFromCode(int code) {
+	public static @NonNull String getVersionFromCode(int code) {
 		switch(code) {
 		case 45:
 			return "Java 1.1";

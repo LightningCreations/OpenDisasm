@@ -1,7 +1,7 @@
 package com.lightning.opendisasm.util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.EOFException;
@@ -9,13 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-@ParametersAreNonnullByDefault
 public class BytewiseReader implements Closeable {
     private InputStream stream;
     private boolean bigEndian;
     private long pos;
     
-    public @Nonnull byte[] readBytes(int len) throws IOException {
+    public @NonNull byte[] readBytes(int len) throws IOException {
     	byte[] ret = new byte[len];
     	if(stream.read(ret)!=len)
     		throw new EOFException("Unexpected End of Stream");
@@ -142,13 +141,13 @@ public class BytewiseReader implements Closeable {
     	abstract byte[] readBytes(BytewiseReader in)throws IOException;
     }
 
-	public @Nonnull
+	public @NonNull
     String readString(Charset set) throws IOException {
 		// TODO Auto-generated method stub
 		return readString(set,StringType.LengthPrefixed);
 	}
 
-	public @Nonnull String readString(Charset set, StringType type) throws IOException {
+	public @NonNull String readString(Charset set, StringType type) throws IOException {
 		byte[] bytes = type.readBytes(this);
 		return new String(bytes,set);
 	}
@@ -162,18 +161,18 @@ public class BytewiseReader implements Closeable {
 		return Float.intBitsToFloat(readInt());
 	}
 	
-	private <E extends Enum<E>> E valueOfIndex(Class<E> cl,int idx) {
+	private <E extends @NonNull Enum<E>> E valueOfIndex(Class<E> cl,int idx) {
 		E[] e = cl.getEnumConstants();
 		return e[idx];
 	}
 	
-	public @Nonnull <E extends Enum<E>> E readEnum8(Class<E> cl) throws IOException {
+	public <E extends @NonNull Enum<E>> E readEnum8(Class<E> cl) throws IOException {
 		return valueOfIndex(cl,readUByte());
 	}
-    public @Nonnull <E extends Enum<E>> E readEnum16(Class<E> cl) throws IOException {
+    public <E extends @NonNull Enum<E>> E readEnum16(Class<E> cl) throws IOException {
         return valueOfIndex(cl,readUShort());
     }
-    public @Nonnull <E extends Enum<E>> E readEnum32(Class<E> cl) throws IOException {
+    public <E extends @NonNull Enum<E>> E readEnum32(Class<E> cl) throws IOException {
         return valueOfIndex(cl,(int)readUInt());
     }
 }

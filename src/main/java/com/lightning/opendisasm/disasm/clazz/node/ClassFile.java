@@ -10,8 +10,8 @@ import com.lightning.opendisasm.disasm.clazz.node.constpool.ConstantPoolNode;
 import com.lightning.opendisasm.tree.MetadataNode;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 public class ClassFile implements Node {
 	public static void throwParserError(String msg) {
@@ -45,7 +45,7 @@ public class ClassFile implements Node {
 			return file;
 		}
 
-		@Nonnull
+		@NonNull
 		@Override
 		public List<? extends Node> getChildren() {
 			// TODO Auto-generated method stub
@@ -76,7 +76,7 @@ public class ClassFile implements Node {
 		return null;
 	}
 
-	@Nonnull
+	@NonNull
 	@Override
 	public List<? extends Node> getChildren() {
 		// TODO Auto-generated method stub

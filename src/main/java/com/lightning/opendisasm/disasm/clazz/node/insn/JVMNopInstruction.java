@@ -4,8 +4,9 @@ import com.lightning.opendisasm.disasm.clazz.node.attribute.CodeAttributeNode;
 import com.lightning.opendisasm.tree.InstructionNode;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.BytewiseReader;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class JVMNopInstruction implements InstructionNode {
         return parent;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public List<? extends Node> getChildren() {
         return Collections.emptyList();

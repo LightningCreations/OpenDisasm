@@ -6,18 +6,17 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import com.lightning.opendisasm.detector.Detector;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
+
 public class TransformerNode implements Node {
 	private final Node parent;
 	private Node child;
 	private final String target;
 	private final Consumer<TransformerNode> andThen;
 	
-	public TransformerNode(Node parent,Node child,String target) {
+	public TransformerNode(Node parent,Node child, String target) {
 		this(parent,child,target,t->{});
 	}
 	public TransformerNode(Node parent,Node child,String target,Consumer<TransformerNode> andThen) {
@@ -48,7 +47,7 @@ public class TransformerNode implements Node {
 	}
 
 	@Override
-	public @Nonnull List<? extends Node> getChildren() {
+	public @NonNull List<? extends @NonNull Node> getChildren() {
 		// TODO Auto-generated method stub
 		return Collections.singletonList(child);
 	}

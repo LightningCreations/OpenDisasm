@@ -7,12 +7,12 @@ import java.util.function.Supplier;
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.disasm.clazz.SWFDisassembler;
 import com.lightning.opendisasm.util.BytewiseReader;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 public class SWFDetector extends DetectorBase {
     @Override
-    public boolean detect(@Nonnull InputStream file) {
+    public boolean detect(@NonNull InputStream file) {
         try (BytewiseReader reader = new BytewiseReader(file)) {
             char sig1 = (char)reader.readUByte();
             if(sig1 != 'F' && sig1 != 'C' && sig1 != 'Z') return false;
@@ -29,13 +29,13 @@ public class SWFDetector extends DetectorBase {
     }
 
     @Override
-    public boolean handles(@Nonnull String targetName) {
+    public boolean handles(@NonNull String targetName) {
         return targetName.equals("swf");
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Supplier<? extends Disassembler> getDisasm() {
+    public Supplier<? extends @NonNull Disassembler> getDisasm() {
         return SWFDisassembler::new;
     }
 }

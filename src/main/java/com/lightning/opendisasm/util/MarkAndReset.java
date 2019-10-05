@@ -1,12 +1,13 @@
 package com.lightning.opendisasm.util;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 public final class MarkAndReset implements AutoCloseable {
 	private InputStream strm;
-	public MarkAndReset(@Nonnull InputStream strm, int limit) {
+	public MarkAndReset(@NonNull InputStream strm, int limit) {
 	    this.strm = strm;
 		strm.mark(limit);
 	}

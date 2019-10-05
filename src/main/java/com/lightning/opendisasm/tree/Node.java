@@ -1,8 +1,9 @@
 package com.lightning.opendisasm.tree;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
+
 import java.util.List;
 
 public interface Node {
@@ -16,7 +17,7 @@ public interface Node {
 	 * Gets all the Children of this node, or an empty list.
 	 * For all Children c of this node, c.getParent().equals(this) shall be true.
 	 */
-	public @Nonnull List<? extends Node> getChildren();
+	public @NonNull List<? extends @NonNull Node> getChildren();
 
-	public String getName();
+	public @NonNull String getName();
 }
