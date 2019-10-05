@@ -13,8 +13,9 @@ public class BytewiseReader implements Closeable {
     private InputStream stream;
     private boolean bigEndian;
     private long pos;
-    
-    public @NonNull byte[] readBytes(int len) throws IOException {
+
+    @NonNull
+    public byte[] readBytes(int len) throws IOException {
     	byte[] ret = new byte[len];
     	if(stream.read(ret)!=len)
     		throw new EOFException("Unexpected End of Stream");
