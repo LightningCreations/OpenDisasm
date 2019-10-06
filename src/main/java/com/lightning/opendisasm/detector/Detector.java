@@ -17,15 +17,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Detector {
     public @Nullable
-	static DisassembledFile diassembleStream(InputStream file) {
+	static DisassembledFile disassembleStream(InputStream file) {
     	if(!file.markSupported())
-    		return diassembleStream(new BufferedInputStream(file));
+    		return disassembleStream(new BufferedInputStream(file));
     	 return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassemble(file)).orElse(null);
     }
     
-    public @Nullable static Node diassembleTreeFromStream(InputStream file) {
+    public @Nullable static Node disassembleTreeFromStream(InputStream file) {
     	if(!file.markSupported())
-    		return diassembleTreeFromStream(new BufferedInputStream(file));
+    		return disassembleTreeFromStream(new BufferedInputStream(file));
     	return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassembleTree(file)).orElse(null);
     }
     
