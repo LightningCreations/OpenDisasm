@@ -43,7 +43,7 @@ public class TransformerNode implements Node {
 	
 	
 	public void transform() {
-		Detector.getTransformerFor(target).get().applyTo(this);
+		Detector.getTransformerFor(target).ifPresent(s->s.get().applyTo(this));
 		this.andThen.accept(this);
 	}
 

@@ -12,6 +12,7 @@ import com.lightning.opendisasm.disasm.DisassembledFile;
 import com.lightning.opendisasm.disasm.Disassembler;
 import com.lightning.opendisasm.tree.Node;
 import com.lightning.opendisasm.util.MarkAndReset;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Detector {
@@ -59,8 +60,7 @@ public class Detector {
     	if(!file.markSupported())
     		throw new RuntimeException("Cannot detect file type, file does not support marks");
         for(DetectorBase detector:ServiceLoader.load(DetectorBase.class)) {
-            try(MarkAndReset raii = new MarkAndReset(file,1024)) {
-           
+            try(MarkAndReset ignored = new MarkAndReset(file,1024)) {
             	try(UnbreakMarkAndResetInputStream unbreak = new UnbreakMarkAndResetInputStream(file)){
             		if(detector.detect(unbreak))return detector.getDisasm();
             	}
@@ -71,10 +71,10 @@ public class Detector {
         return null;
     }
     
-    public static Supplier<? extends Disassembler> getTransformerFor(String target){
+    public static Optional<Supplier<? extends @NonNull Disassembler>> getTransformerFor(String target){
     	for(DetectorBase detector:ServiceLoader.load(DetectorBase.class))
     		if(detector.handles(target))
-    			return detector.getDisasm();
-    	return null;
+    			return Optional.of(detector.getDisasm());
+    	return Optional.empty();
     }
 }
