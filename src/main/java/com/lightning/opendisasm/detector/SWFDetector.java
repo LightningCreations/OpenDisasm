@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.function.Supplier;
 
 import com.lightning.opendisasm.disasm.Disassembler;
-import com.lightning.opendisasm.disasm.clazz.SWFDisassembler;
+import com.lightning.opendisasm.disasm.swf.SWFDisassembler;
 import com.lightning.opendisasm.util.BytewiseReader;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

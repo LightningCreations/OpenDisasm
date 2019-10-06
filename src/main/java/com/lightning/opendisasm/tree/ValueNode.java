@@ -4,4 +4,5 @@ import com.lightning.opendisasm.util.OperandType;
 
 public interface ValueNode extends Node {
 	public OperandType getType();
+	public Object getValue();
 }

@@ -22,6 +22,11 @@ public class BytewiseReader implements Closeable {
     	return ret;
     }
     
+    @NonNull
+    public byte[] readRemaining() throws IOException {
+        return readBytes(stream.available());
+    }
+    
     private int read() throws IOException {
     	int val = stream.read();
     	if(val<0)
