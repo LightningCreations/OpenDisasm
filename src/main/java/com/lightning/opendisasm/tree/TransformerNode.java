@@ -17,10 +17,10 @@ public class TransformerNode implements Node {
 	private final String target;
 	private final Consumer<TransformerNode> andThen;
 	
-	public TransformerNode(Node parent, Function<? super Node,? extends @NonNull Node> child, String target) {
+	public TransformerNode(Node parent, Function<? super TransformerNode,? extends @NonNull Node> child, String target) {
 		this(parent,child,target,t->{});
 	}
-	public TransformerNode(Node parent, Function<? super Node, ? extends @NonNull Node> child, String target, Consumer<TransformerNode> andThen) {
+	public TransformerNode(Node parent, Function<? super TransformerNode, ? extends @NonNull Node> child, String target, Consumer<TransformerNode> andThen) {
 		this.parent = Objects.requireNonNull(parent);
 		this.target = Objects.requireNonNull(target);
 		this.andThen = Objects.requireNonNull(andThen);
