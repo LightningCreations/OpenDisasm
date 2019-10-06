@@ -20,13 +20,13 @@ public class Detector {
 	static DisassembledFile disassembleStream(InputStream file) {
     	if(!file.markSupported())
     		return disassembleStream(new BufferedInputStream(file));
-    	 return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassemble(file)).orElse(null);
+    	 return getDisasmFor(file).map(Supplier::get).map(d->d.disassemble(file)).orElse(null);
     }
     
     public @Nullable static Node disassembleTreeFromStream(InputStream file) {
     	if(!file.markSupported())
     		return disassembleTreeFromStream(new BufferedInputStream(file));
-    	return Optional.ofNullable(getDisasmFor(file)).map(Supplier::get).map(d->d.disassembleTree(file)).orElse(null);
+    	return getDisasmFor(file).map(Supplier::get).map(d->d.disassembleTree(file)).orElse(null);
     }
     
     private static class UnbreakMarkAndResetInputStream extends FilterInputStream{
@@ -56,19 +56,19 @@ public class Detector {
     	
     }
     
-    public static Supplier<? extends Disassembler> getDisasmFor(InputStream file) {
+    public static Optional<Supplier<? extends Disassembler>> getDisasmFor(InputStream file) {
     	if(!file.markSupported())
     		throw new RuntimeException("Cannot detect file type, file does not support marks");
         for(DetectorBase detector:ServiceLoader.load(DetectorBase.class)) {
             try(MarkAndReset ignored = new MarkAndReset(file,1024)) {
             	try(UnbreakMarkAndResetInputStream unbreak = new UnbreakMarkAndResetInputStream(file)){
-            		if(detector.detect(unbreak))return detector.getDisasm();
+            		if(detector.detect(unbreak))return  Optional.of(detector.getDisasm());
             	}
             } catch (IOException e1) {
 				throw new RuntimeException(e1);
 			}
         }
-        return null;
+        return Optional.empty();
     }
     
     public static Optional<Supplier<? extends @NonNull Disassembler>> getTransformerFor(String target){
