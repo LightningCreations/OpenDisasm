@@ -22,9 +22,9 @@ public class TransformerNode implements Node {
 	}
 	public TransformerNode(Node parent, Function<? super Node, ? extends @NonNull Node> child, String target, Consumer<TransformerNode> andThen) {
 		this.parent = Objects.requireNonNull(parent);
-		this.child = Objects.requireNonNull(child).apply(this);
 		this.target = Objects.requireNonNull(target);
 		this.andThen = Objects.requireNonNull(andThen);
+		this.child = Objects.requireNonNull(child).apply(this);
 	}
 	
 	@Override
@@ -37,8 +37,8 @@ public class TransformerNode implements Node {
 		return child;
 	}
 	
-	public void replaceChild(Node node) {
-		this.child = node;
+	public void replaceChild(@NonNull Node node) {
+		this.child = Objects.requireNonNull(node);
 	}
 	
 	
