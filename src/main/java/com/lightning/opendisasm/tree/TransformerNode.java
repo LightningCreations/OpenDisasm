@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.lightning.opendisasm.detector.Detector;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -16,12 +17,12 @@ public class TransformerNode implements Node {
 	private final String target;
 	private final Consumer<TransformerNode> andThen;
 	
-	public TransformerNode(Node parent,Node child, String target) {
+	public TransformerNode(Node parent, Function<? super Node,? extends @NonNull Node> child, String target) {
 		this(parent,child,target,t->{});
 	}
-	public TransformerNode(Node parent,Node child,String target,Consumer<TransformerNode> andThen) {
+	public TransformerNode(Node parent, Function<? super Node, ? extends @NonNull Node> child, String target, Consumer<TransformerNode> andThen) {
 		this.parent = Objects.requireNonNull(parent);
-		this.child = Objects.requireNonNull(child);
+		this.child = Objects.requireNonNull(child).apply(this);
 		this.target = Objects.requireNonNull(target);
 		this.andThen = Objects.requireNonNull(andThen);
 	}
