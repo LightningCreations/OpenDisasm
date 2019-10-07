@@ -57,5 +57,4 @@ public class TransformerNode implements Node {
 	public String getName() {
 		return "(transformer)";
 	}
-
 }

@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.lightning.opendisasm.detector.Detector;
 import com.lightning.opendisasm.disasm.DisassembledFile;
+import com.lightning.opendisasm.tree.Node;
 
 public class CLIMain {
     private static final Logger LOGGER = LogManager.getLogger(CLIMain.class);
@@ -55,13 +56,13 @@ public class CLIMain {
             System.exit(1);
         }
         
-        DisassembledFile result = Detector.diassembleStream(inputFile);
+        Node result = Detector.diassembleTreeFromStream(inputFile);
         if(result==null) {
         	LOGGER.error("No detector available that understands the input file");
         	System.exit(1);
         }
         LOGGER.trace("Done disassembling");
-        LOGGER.info("Result:\n" + result.toString());
+        LOGGER.info("Result:\n" + result.stringify());
         BufferedWriter printer = new BufferedWriter(new FileWriter("result.txt"));
         printer.write(result.toString());
         printer.close();

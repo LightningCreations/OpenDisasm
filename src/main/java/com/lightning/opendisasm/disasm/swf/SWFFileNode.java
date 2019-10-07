@@ -20,7 +20,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class SWFFileNode implements Node {
     private static final ArrayList<Node> emptyList = new ArrayList<>();
     
-    public ArrayList<Node> children;
+    public ArrayList<Node> children = new ArrayList<>();
     
     private ValueNode constructNode(String name, String type, Object value) {
         return new ValueNode() {
@@ -61,19 +61,16 @@ public class SWFFileNode implements Node {
     public SWFFileNode(BytewiseReader r) {
         try {
             short sig0;
-            children.add(constructNode("Signature[0]", "uint8_t", (Short)(sig0 = r.readUByte())));
-            children.add(constructNode("Signature[1]", "uint8_t", (Short)r.readUByte()));
-            children.add(constructNode("Signature[2]", "uint8_t", (Short)r.readUByte()));
+            children.add(constructNode("Signature[0]", "uchar8_t", (char)(sig0 = r.readUByte())));
+            children.add(constructNode("Signature[1]", "uchar8_t", (char)r.readUByte()));
+            children.add(constructNode("Signature[2]", "uchar8_t", (char)r.readUByte()));
             children.add(constructNode("Version", "uint8_t", (Short)r.readUByte()));
             children.add(constructNode("FileLength", "uint32_t", (Long)r.readUInt()));
-            Function<? super Node, ? extends @NonNull Node> octetStreamGen = new Function<Node, OctetStreamNode>() {
-                public @NonNull OctetStreamNode apply(Node parent) {
-                    try {
-                        return new OctetStreamNode(r.readRemaining(), parent);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null; // Uh... yeah... do you have a better way to do this?
-                    }
+            Function<? super Node, ? extends @NonNull Node> octetStreamGen = (Node parent) -> {
+                try {
+                    return new OctetStreamNode(r.readRemaining(), parent);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             };
             
