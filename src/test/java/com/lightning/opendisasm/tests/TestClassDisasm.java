@@ -12,6 +12,6 @@ public class TestClassDisasm {
     public void testClassFile(ClassDefinition defn){
         byte[] data = defn.getDefinitionClassFile();
         ByteArrayInputStream strm = new ByteArrayInputStream(data);
-        Node node = Detector.diassembleTreeFromStream(strm);
+        Node node = Detector.disassembleTreeFromStream(strm);
     }
 }

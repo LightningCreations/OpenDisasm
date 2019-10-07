@@ -56,7 +56,7 @@ public class CLIMain {
             System.exit(1);
         }
         
-        Node result = Detector.diassembleTreeFromStream(inputFile);
+        Node result = Detector.disassembleTreeFromStream(inputFile);
         if(result==null) {
         	LOGGER.error("No detector available that understands the input file");
         	System.exit(1);

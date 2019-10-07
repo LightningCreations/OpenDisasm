@@ -56,7 +56,7 @@ public class GUIFrame extends JFrame {
                         return;
                     }
                     
-                    Node result = Detector.diassembleTreeFromStream(inputFile);
+                    Node result = Detector.disassembleTreeFromStream(inputFile);
                     if(result==null) {
                         return;
                     }
