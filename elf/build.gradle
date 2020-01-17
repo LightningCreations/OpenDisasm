@@ -6,33 +6,21 @@ group 'github.lightningcreations.opendisasm'
 version '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
-
-repositories {
+repositories{
     mavenLocal()
     maven {
         url = "https://lightningcreations.github.io/Maven"
+        name = "Lightning Creations Maven"
     }
-    jcenter()
     mavenCentral()
 }
 
+
 dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.checkerframework/checker-qual
     compile group: 'org.checkerframework', name: 'checker-qual', version: '2.11.1'
-
-    compile 'org.apache.logging.log4j:log4j-core:2.11.2'
-    compile 'commons-io:commons-io:2.6'
-    compile 'commons-cli:commons-cli:1.4'
-    // https://mvnrepository.com/artifact/junit/junit
-    testCompile group: 'junit', name: 'junit', version: '4.13-beta-3'
-}
-
-jar {
-    manifest {
-        attributes (
-                'Automatic-Module-Name': 'com.lightning.opendisasm'
-        )
-    }
+    compile group: 'github.lightningcreations.opendisasm', name: 'core', version: '0.0.1-SNAPSHOT'
 }
 
 task sourceJar(type: Jar){
@@ -45,13 +33,13 @@ task javadocJar(type: Jar){
     archiveClassifier = "javadoc"
 }
 
-publishing{
-    publications{
-        core(MavenPublication){
-            from components.java
-            artifact sourceJar
-            artifact javadocJar
-            artifactId = 'core'
+publishing {
+    publications {
+        elf(MavenPublication){
+            // from components.java
+            // artifact sourceJar
+            // artifact javadocJar
+            artifactId = 'elf'
         }
     }
 }
