@@ -1,3 +1,0 @@
-com.lightning.opendisasm.detector.ELFDetector # ELF Binaries
-com.lightning.opendisasm.detector.ClassFileDetector # Class Files
-com.lightning.opendisasm.detector.SWFDetector # SWF Files
