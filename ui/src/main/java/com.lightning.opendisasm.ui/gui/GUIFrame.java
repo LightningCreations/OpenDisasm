@@ -19,8 +19,6 @@ import javax.swing.UIManager;
 import com.lightning.opendisasm.detector.Detector;
 import com.lightning.opendisasm.tree.Node;
 
-import static com.lightning.opendisasm.ui.gui.GUIFunctions.*;
-
 public class GUIFrame extends JFrame {
     private static final long serialVersionUID = -854188747747807219L;
     
@@ -60,7 +58,7 @@ public class GUIFrame extends JFrame {
                     if(result==null) {
                         return;
                     }
-                    openTreeView(result);
+                    GUIFunctions.openTreeView(result);
                 } else {
                     // Cancelled
                 }
@@ -73,7 +71,7 @@ public class GUIFrame extends JFrame {
         //Lambdafy this
         fileExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                cleanup();
+                GUIFunctions.cleanup();
             }
         });
         fileMenu.add(fileExit);
@@ -87,7 +85,7 @@ public class GUIFrame extends JFrame {
         //Lambdafy this
         helpVersion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                openAbout();
+                GUIFunctions.openAbout();
             }
         });
         helpMenu.add(helpVersion);

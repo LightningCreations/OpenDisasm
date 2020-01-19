@@ -3,4 +3,5 @@ include 'java-class'
 include 'elf'
 include 'swf'
 include 'core'
+include 'ui'
 

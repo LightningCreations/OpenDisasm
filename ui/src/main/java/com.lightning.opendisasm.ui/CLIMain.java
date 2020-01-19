@@ -16,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.lightning.opendisasm.detector.Detector;
-import com.lightning.opendisasm.disasm.DisassembledFile;
 import com.lightning.opendisasm.tree.Node;
 
 public class CLIMain {

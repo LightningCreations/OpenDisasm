@@ -1,6 +1,6 @@
 package com.lightning.opendisasm.ui;
 
-import com.lightning.opendisasm.ui.gui.*;
+import com.lightning.opendisasm.ui.gui.GUIFrame;
 
 import static com.lightning.opendisasm.ui.gui.GUIFunctions.*;
 
