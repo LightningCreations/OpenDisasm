@@ -4,4 +4,5 @@ include 'elf'
 include 'swf'
 include 'core'
 include 'ui'
+include 'compression'
 
