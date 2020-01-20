@@ -60,9 +60,9 @@ public class SWFFileNode implements Node {
     public SWFFileNode(BytewiseReader r) {
         try {
             short sig0;
-            children.add(constructNode("Signature[0]", "uchar8_t", (char)(sig0 = r.readUByte())));
-            children.add(constructNode("Signature[1]", "uchar8_t", (char)r.readUByte()));
-            children.add(constructNode("Signature[2]", "uchar8_t", (char)r.readUByte()));
+            children.add(constructNode("Signature[0]", "uint8_t", (char)(sig0 = r.readUByte())));
+            children.add(constructNode("Signature[1]", "uint8_t", (char)r.readUByte()));
+            children.add(constructNode("Signature[2]", "uint8_t", (char)r.readUByte()));
             children.add(constructNode("Version", "uint8_t", (Short)r.readUByte()));
             children.add(constructNode("FileLength", "uint32_t", (Long)r.readUInt()));
             Function<? super Node, ? extends @NonNull Node> octetStreamGen = (Node parent) -> {
