@@ -41,39 +41,33 @@ public class GUIFrame extends JFrame {
         
         JMenuItem fileOpen = new JMenuItem("Open...");
         fileOpen.setMnemonic(KeyEvent.VK_O);
-        fileOpen.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                final JFileChooser fc = new JFileChooser();
-                int returnCode = fc.showOpenDialog(GUIFrame.this);
-                if(returnCode == JFileChooser.APPROVE_OPTION) {
-                    File file = fc.getSelectedFile();
-                    FileInputStream inputFile = null;
-                    try {
-                        inputFile = new FileInputStream(file);
-                    } catch (FileNotFoundException err) {
-                        return;
-                    }
-                    
-                    Node result = Detector.disassembleTreeFromStream(inputFile);
-                    if(result==null) {
-                        return;
-                    }
-                    GUIFunctions.openTreeView(result);
-                } else {
-                    // Cancelled
+        fileOpen.addActionListener((ActionEvent e) -> {
+            final JFileChooser fc = new JFileChooser();
+            int returnCode = fc.showOpenDialog(GUIFrame.this);
+            if(returnCode == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                FileInputStream inputFile = null;
+                try {
+                    inputFile = new FileInputStream(file);
+                } catch (FileNotFoundException err) {
+                    return;
                 }
+
+                Node result = Detector.disassembleTreeFromStream(inputFile);
+                if(result==null) {
+                    return;
+                }
+                GUIFunctions.openTreeView(result);
+            } else {
+                // Cancelled
             }
         });
         fileMenu.add(fileOpen);
         
         JMenuItem fileExit = new JMenuItem("Quit");
         fileExit.setMnemonic(KeyEvent.VK_Q);
-        //Lambdafy this
-        fileExit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                GUIFunctions.cleanup();
-            }
-        });
+
+        fileExit.addActionListener(e -> GUIFunctions.cleanup());
         fileMenu.add(fileExit);
         
         menuBar.add(fileMenu);
@@ -82,12 +76,8 @@ public class GUIFrame extends JFrame {
         helpMenu.setMnemonic(KeyEvent.VK_H);
         
         JMenuItem helpVersion = new JMenuItem("About...");
-        //Lambdafy this
-        helpVersion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                GUIFunctions.openAbout();
-            }
-        });
+
+        helpVersion.addActionListener(e -> GUIFunctions.openAbout());
         helpMenu.add(helpVersion);
         
         menuBar.add(helpMenu);
