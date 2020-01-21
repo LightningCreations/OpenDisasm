@@ -31,4 +31,8 @@ public class StringifyVisitor implements NodeVisitor {
         builder.append(StringUtil.getSpaces(tabs*4)).append(root.stringify());
         NodeVisitor.super.visitTree(root);
     }
+
+    public String toString(){
+        return builder.toString();
+    }
 }
