@@ -6,20 +6,13 @@ group 'github.lightningcreations.opendisasm'
 version '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
-repositories{
-    mavenLocal()
-    maven {
-        url = "https://lightningcreations.github.io/Maven"
-        name = "Lightning Creations Maven"
-    }
+
+repositories {
     mavenCentral()
 }
 
-
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    // https://mvnrepository.com/artifact/org.checkerframework/checker-qual
-    compile group: 'org.checkerframework', name: 'checker-qual', version: '2.11.1'
     compile project(":core")
 }
 
@@ -35,11 +28,11 @@ task javadocJar(type: Jar){
 
 publishing {
     publications {
-        elf(MavenPublication){
-            // from components.java
-            // artifact sourceJar
-            // artifact javadocJar
-            artifactId = 'elf'
+        'selftest-wrapper'(MavenPublication){
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+            artifactId = 'selftest-wrapper'
         }
     }
 }

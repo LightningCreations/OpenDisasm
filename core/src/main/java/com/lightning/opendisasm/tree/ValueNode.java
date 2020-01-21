@@ -7,10 +7,10 @@ public interface ValueNode extends Node {
 	public OperandType getType();
 	public Object getValue();
 	
-	public default String stringify(int numSpaces) {
+	public default String stringify() {
         StringBuilder result = new StringBuilder();
 
-        result.append(StringUtil.getSpaces(numSpaces)); result.append(getName()); result.append(": (");
+        result.append(getName()); result.append(": (");
         result.append(getType().getTypeName()); result.append(") ");
         if(getValue() instanceof Character) {
             result.append('\'');

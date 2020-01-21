@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'github.lightningcreations.opendisasm', name:"core", version: '0.0.1-SNAPSHOT'
+    compile project(":core")
     runtimeOnly project(":java-class")
     runtimeOnly project(":swf")
     runtimeOnly project(":elf")

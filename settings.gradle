@@ -5,4 +5,6 @@ include 'swf'
 include 'core'
 include 'ui'
 include 'compression'
+include 'selftest'
+include 'selftest-wrapper'
 

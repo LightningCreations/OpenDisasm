@@ -20,7 +20,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.checkerframework/checker-qual
     compile group: 'org.checkerframework', name: 'checker-qual', version: '2.11.1'
-    compile group: 'github.lightningcreations.opendisasm', name: 'core', version: '0.0.1-SNAPSHOT'
+    compile project(":core")
 }
 
 task sourceJar(type: Jar){
