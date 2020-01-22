@@ -86,6 +86,7 @@ public class GUIFrame extends JFrame {
         
         pack();
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
 }
