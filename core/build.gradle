@@ -1,9 +1,10 @@
+import java.time.Instant;
 plugins {
     id 'java'
 }
 
 group 'github.lightningcreations.opendisasm'
-version '0.0.1-SNAPSHOT'
+version '0.0.1'
 
 sourceCompatibility = 1.8
 
@@ -52,6 +53,13 @@ publishing{
             artifact sourceJar
             artifact javadocJar
             artifactId = 'core'
+        }
+        coreSnapshot(MavenPublication){
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+            artifactId = 'core'
+            version = project.version+"-SNAPSHOT-"+Instant.now().toString()
         }
     }
 }

@@ -25,3 +25,15 @@ publishing {
 		}
 	}
 }
+
+task publishSnapshotsToLocal{
+	dependsOn tasks.withType(PublishToMavenLocal).matching {
+		e->e.getName().contains("Snapshot")
+	}
+}
+
+task publishSnapshots{
+	dependsOn tasks.withType(PublishToMavenRepository).matching{
+		e->e.getName().contains("Snapshot")
+	}
+}
