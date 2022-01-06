@@ -121,7 +121,10 @@ struct OpenDisasmApplication {
 }
 
 impl OpenDisasmApplication {
-    fn render_window(window: &OdWindow, _: theme::Theme) -> Element<<Self as Application>::Message> {
+    fn render_window(
+        window: &OdWindow,
+        _: theme::Theme,
+    ) -> Element<<Self as Application>::Message> {
         Text::new(format!("{:?}", window.id)).into()
     }
 }
