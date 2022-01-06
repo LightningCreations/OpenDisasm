@@ -1,11 +1,13 @@
 [package]
-name = "od_core"
+name = "od_interface"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-od_interface = { path = "../od_interface" }
-xlang_abi = "^0.1.1"
-xlang_host = "^0.1.0"
+xlang_abi = "0.1.1"
+xlang_host = "0.1.0"
+
+[lib]
+crate-type=["cdylib"]

@@ -1833,6 +1833,7 @@ dependencies = [
 name = "od_core"
 version = "0.1.0"
 dependencies = [
+ "od_interface",
  "xlang_abi",
  "xlang_host",
 ]
@@ -1844,6 +1845,14 @@ dependencies = [
  "iced",
  "od_core",
  "rfd",
+]
+
+[[package]]
+name = "od_interface"
+version = "0.1.0"
+dependencies = [
+ "xlang_abi",
+ "xlang_host",
 ]
 
 [[package]]
