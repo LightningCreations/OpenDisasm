@@ -51,6 +51,7 @@ impl From<abi_safe::Error> for Error {
 
 static DISASSEMBLERS: SyncOnceCell<Vec<Box<dyn abi_safe::Disassembler + Send + Sync>>> = SyncOnceCell::new();
 
+#[allow(clippy::let_and_return)]
 pub fn init_list() -> Vec<Box<dyn abi_safe::Disassembler + Send + Sync>> {
     let result = Vec::new();
     // TODO

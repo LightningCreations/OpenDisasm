@@ -165,7 +165,7 @@ impl Application for OpenDisasmApplication {
                         OdWindowId::Error(String::from("The requested file is unaccessible"))
                     }
                 },
-                |result| OdMessage::OpenWindow(result),
+                OdMessage::OpenWindow,
             ),
             OdMessage::Menu(id) => {
                 if matches!(prev_menu, Some(menu) if menu.id == id) {
@@ -191,7 +191,7 @@ impl Application for OpenDisasmApplication {
             OdMessage::OpenFile => {
                 let dialog = FileDialog::new();
                 Command::perform(async move { dialog.pick_file() }, |out| {
-                    out.map_or(OdMessage::None, |x| OdMessage::FileOpened(x))
+                    out.map_or(OdMessage::None, OdMessage::FileOpened)
                 })
             }
             OdMessage::OpenWindow(id) => {

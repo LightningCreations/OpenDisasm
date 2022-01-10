@@ -17,6 +17,7 @@ pub extern "C" fn xlang_allocate(size: usize) -> *mut core::ffi::c_void {
     }
 }
 
+#[allow(clippy::missing_safety_doc)]
 #[no_mangle]
 pub unsafe extern "C" fn xlang_allocate_aligned(
     size: usize,
@@ -30,6 +31,7 @@ pub unsafe extern "C" fn xlang_allocate_aligned(
     std::alloc::alloc(layout).cast::<_>()
 }
 
+#[allow(clippy::missing_safety_doc)]
 #[no_mangle]
 pub unsafe extern "C" fn xlang_deallocate_aligned(
     ptr: *mut core::ffi::c_void,
