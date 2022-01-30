@@ -1,8 +1,9 @@
 use iced::{
-    button, executor, Application, Button, Clipboard, Column, Command, Container, Element, Length,
-    Row, Settings, Text,
+    button, executor, Application, Button, Column, Command, Container, Element, Length, Row,
+    Settings, Text,
 };
 use od_core::load_file;
+use od_core::structure::TreeNode;
 use rfd::FileDialog;
 use std::fs::File;
 use std::path::PathBuf;
@@ -98,11 +99,17 @@ struct OdMenu {
     items: Vec<(String, OdMessage)>,
 }
 
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Debug)]
 enum OdWindowId {
     About,
     Error(String),
-    TreeView,
+    TreeView(String, TreeNode),
+}
+
+impl PartialEq for OdWindowId {
+    fn eq(&self, other: &Self) -> bool {
+        std::mem::discriminant(self) == std::mem::discriminant(other)
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -147,20 +154,21 @@ impl Application for OpenDisasmApplication {
         String::from("OpenDisasm v") + VERSION
     }
 
-    fn update(
-        &mut self,
-        message: Self::Message,
-        _clipboard: &mut Clipboard,
-    ) -> Command<Self::Message> {
+    fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
         let mut prev_menu = None;
         std::mem::swap(&mut prev_menu, &mut self.open_menu);
         match message {
-            OdMessage::FileOpened(file) => Command::perform(
+            OdMessage::FileOpened(filename) => Command::perform(
                 async move {
-                    let file = File::open(file);
+                    let file = File::open(&filename);
                     if let Ok(file) = file {
-                        let _ = load_file(file);
-                        OdWindowId::TreeView
+                        if let Ok(tree) = load_file(file) {
+                            OdWindowId::TreeView(filename.to_string_lossy().to_string(), tree)
+                        } else {
+                            OdWindowId::Error(String::from(
+                                "The requested file has an unknown format",
+                            ))
+                        }
                     } else {
                         OdWindowId::Error(String::from("The requested file is unaccessible"))
                     }

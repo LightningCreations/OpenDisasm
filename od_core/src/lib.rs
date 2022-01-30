@@ -1,17 +1,18 @@
 #![feature(once_cell)]
 
-#[link(name = "od_interface")] extern "C"{}
+#[link(name = "od_interface")]
+extern "C" {}
+
+pub mod structure;
 
 use std::fs::File;
 use std::lazy::SyncOnceCell;
+use structure::TreeNode;
 use xlang_abi::io::ReadAdapter;
 use xlang_abi::traits::DynMut;
 
-#[repr(C)]
-pub struct Tree;
-
 pub mod abi_safe {
-    pub use super::Tree;
+    pub use super::structure::TreeNode;
     use xlang_abi::traits::DynMut;
 
     pub enum Error {
@@ -25,10 +26,11 @@ pub mod abi_safe {
 
     pub trait Disassembler {
         fn can_read<'a>(&self, file: DynMut<dyn xlang_abi::io::Read + 'a>) -> Result<bool>;
-        fn disassemble<'a>(&self, file: DynMut<dyn xlang_abi::io::Read + 'a>) -> Result<Tree>;
+        fn disassemble<'a>(&self, file: DynMut<dyn xlang_abi::io::Read + 'a>) -> Result<TreeNode>;
     }
 }
 
+#[derive(Debug)]
 pub enum Error {
     InvalidFile(String),
     Io(std::io::Error),
@@ -49,7 +51,8 @@ impl From<abi_safe::Error> for Error {
     }
 }
 
-static DISASSEMBLERS: SyncOnceCell<Vec<Box<dyn abi_safe::Disassembler + Send + Sync>>> = SyncOnceCell::new();
+static DISASSEMBLERS: SyncOnceCell<Vec<Box<dyn abi_safe::Disassembler + Send + Sync>>> =
+    SyncOnceCell::new();
 
 #[allow(clippy::let_and_return)]
 pub fn init_list() -> Vec<Box<dyn abi_safe::Disassembler + Send + Sync>> {
@@ -58,11 +61,19 @@ pub fn init_list() -> Vec<Box<dyn abi_safe::Disassembler + Send + Sync>> {
     result
 }
 
-pub fn load_file(file: File) -> Result<Tree> {
+pub fn load_file(file: File) -> Result<TreeNode> {
     let disassemblers = DISASSEMBLERS.get_or_init(init_list);
     for disassembler in disassemblers {
-        if Result::from(disassembler.can_read(DynMut::unsize_mut(&mut ReadAdapter::new(&file))).map_err(Into::into))? {
-            return Result::from(disassembler.disassemble(DynMut::unsize_mut(&mut ReadAdapter::new(file))).map_err(Into::into));
+        if Result::from(
+            disassembler
+                .can_read(DynMut::unsize_mut(&mut ReadAdapter::new(&file)))
+                .map_err(Into::into),
+        )? {
+            return Result::from(
+                disassembler
+                    .disassemble(DynMut::unsize_mut(&mut ReadAdapter::new(file)))
+                    .map_err(Into::into),
+            );
         }
     }
     Err(Error::Unrecognized)
