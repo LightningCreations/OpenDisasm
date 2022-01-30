@@ -1,0 +1,28 @@
+name: build-test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-test:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: sudo apt install libglfw3-dev libasound2-dev
+    - name: Install beta
+      run: |
+        rustup toolchain add beta
+    - name: Build
+      run: cargo +beta build --verbose
+    - name: Run tests
+      run: cargo +beta test --verbose
+
