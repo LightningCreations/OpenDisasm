@@ -16,11 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: sudo apt-get install libasound2-dev
-    - name: Install beta
+    - name: Install nightly
       run: |
-        rustup toolchain add beta --component clippy
+        rustup toolchain add nightly --component clippy
     - name: Build
-      run: cargo +beta clippy
+      run: cargo +nightly clippy
     

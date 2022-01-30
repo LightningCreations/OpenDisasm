@@ -16,9 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install beta
+    - name: Install nightly
       run: |
-        rustup toolchain add beta --component rustfmt
+        rustup toolchain add nightly --component rustfmt
     - name: Build
-      run: cargo +beta fmt -- --check
+      run: cargo +nightly fmt -- --check
     

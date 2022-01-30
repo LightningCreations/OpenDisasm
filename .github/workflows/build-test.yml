@@ -16,13 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: sudo apt install libglfw3-dev libasound2-dev
-    - name: Install beta
+    - name: Install nightly
       run: |
-        rustup toolchain add beta
+        rustup toolchain add nightly
     - name: Build
-      run: cargo +beta build --verbose
-    - name: Run tests
-      run: cargo +beta test --verbose
+      run: cargo +nightly build --verbose
 
