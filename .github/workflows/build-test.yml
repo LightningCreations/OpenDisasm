@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: sudo apt-get install libatk-1.0-0
+      run: sudo apt-get install libatk1.0-0
     - name: Install nightly
       run: |
         rustup toolchain add nightly
