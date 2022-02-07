@@ -1,3 +1,3 @@
 [workspace]
 resolver = "2"
-members = ["od_core", "od_gui", "od_interface"]
+members = ["modules/elf", "od_core", "od_gui", "od_interface"]
