@@ -16,7 +16,9 @@ pub mod abi_safe {
     pub use super::structure::TreeNode;
     use xlang_abi::alloc::Allocator;
     use xlang_abi::io::Read;
-    use xlang_abi::traits::{AbiSafeTrait, AbiSafeUnsize, AbiSafeVTable, DynBox, DynMut, DynPtrSafe};
+    use xlang_abi::traits::{
+        AbiSafeTrait, AbiSafeUnsize, AbiSafeVTable, DynBox, DynMut, DynPtrSafe,
+    };
     use xlang_host::rustcall;
 
     #[repr(u8)]
@@ -40,8 +42,10 @@ pub mod abi_safe {
         align: usize,
         destructor: Option<unsafe extern "C" fn(*mut ())>,
         reserved_dealloc: Option<unsafe extern "C" fn(*mut ())>,
-        can_read: rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn Read>) -> Result<bool>),
-        disassemble: rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn Read>) -> Result<TreeNode>),
+        can_read:
+            rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn Read>) -> Result<bool>),
+        disassemble:
+            rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn Read>) -> Result<TreeNode>),
     }
 
     unsafe impl<'a> AbiSafeVTable<dyn Disassembler + 'a> for DisassemblerVTable {}
@@ -140,13 +144,29 @@ pub mod abi_safe {
         'a: 'lt,
     {
         fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().can_read)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().can_read)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
 
         fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().disassemble)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().disassemble)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
     }
 
@@ -155,13 +175,29 @@ pub mod abi_safe {
         'a: 'lt,
     {
         fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().can_read)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().can_read)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
 
         fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().disassemble)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().disassemble)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
     }
 
@@ -170,13 +206,29 @@ pub mod abi_safe {
         'a: 'lt,
     {
         fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().can_read)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().can_read)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
 
         fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().disassemble)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().disassemble)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
     }
 
@@ -185,13 +237,29 @@ pub mod abi_safe {
         'a: 'lt,
     {
         fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().can_read)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().can_read)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
 
         fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
-            unsafe { let this = std::mem::transmute::<_, &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>>(self);
-            (this.vtable().disassemble)(this.as_raw(), std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file)) }
+            unsafe {
+                let this = std::mem::transmute::<
+                    _,
+                    &dyn DynPtrSafe<dyn Disassembler + Send + Sync + 'static>,
+                >(self);
+                (this.vtable().disassemble)(
+                    this.as_raw(),
+                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                )
+            }
         }
     }
 
@@ -247,13 +315,18 @@ impl From<abi_safe::Error> for Error {
 
 static DISASSEMBLER_NAMES: [&str; 1] = ["elf"];
 
-static DISASSEMBLERS: SyncOnceCell<Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler + Send + Sync>>> =
-    SyncOnceCell::new();
+static DISASSEMBLERS: SyncOnceCell<
+    Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler + Send + Sync>>,
+> = SyncOnceCell::new();
 
 #[allow(clippy::let_and_return)]
 pub fn init_list() -> Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler + Send + Sync>> {
     let mut search_paths = Vec::new();
-    search_paths.push({ let mut my_path = std::env::current_exe().unwrap(); my_path.pop(); my_path });
+    search_paths.push({
+        let mut my_path = std::env::current_exe().unwrap();
+        my_path.pop();
+        my_path
+    });
 
     let mut disassembler_paths = Vec::new();
     for library in DISASSEMBLER_NAMES {
@@ -292,7 +365,9 @@ pub fn init_list() -> Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler +
     let mut result = Vec::new();
     for handle in disassembler_handles {
         let init: rustcall!(
-            extern "rustcall" fn() -> xlang_abi::traits::DynBox<dyn abi_safe::Disassembler + Send + Sync>
+            extern "rustcall" fn() -> xlang_abi::traits::DynBox<
+                dyn abi_safe::Disassembler + Send + Sync,
+            >
         ) = unsafe { handle.function_sym("od_module_main") }
             .expect("disassembler library missing required entry point");
         result.push(init());

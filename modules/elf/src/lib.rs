@@ -14,8 +14,18 @@ impl ElfDisassembler {
 }
 
 impl Disassembler for ElfDisassembler {
-    fn can_read<'a>(&self, _: DynMut<dyn xlang_abi::io::Read + 'a>) -> xlang_abi::result::Result<bool, od_core::abi_safe::Error> { todo!() }
-    fn disassemble<'a>(&self, _: DynMut<dyn xlang_abi::io::Read + 'a>) -> xlang_abi::result::Result<TreeNode, od_core::abi_safe::Error> { todo!() }
+    fn can_read<'a>(
+        &self,
+        _: DynMut<dyn xlang_abi::io::Read + 'a>,
+    ) -> xlang_abi::result::Result<bool, od_core::abi_safe::Error> {
+        todo!()
+    }
+    fn disassemble<'a>(
+        &self,
+        _: DynMut<dyn xlang_abi::io::Read + 'a>,
+    ) -> xlang_abi::result::Result<TreeNode, od_core::abi_safe::Error> {
+        todo!()
+    }
 }
 
 rustcall! {
