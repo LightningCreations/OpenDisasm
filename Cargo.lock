@@ -1785,6 +1785,8 @@ name = "od_module_elf"
 version = "0.1.0"
 dependencies = [
  "od_core",
+ "xlang_abi",
+ "xlang_host",
 ]
 
 [[package]]
