@@ -399,9 +399,12 @@ pub fn load_file(file: File) -> Result<TreeNode> {
 mod tests {
     use crate::load_file;
     use std::fs::File;
+    use std::path::PathBuf;
 
     #[test]
     fn infra_is_sane() {
-        assert!(load_file(File::open("tests/empty_elf.bin").expect("couldn't load file")).is_ok());
+        let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        d.push("test/empty_elf.bin");
+        assert!(load_file(File::open(d).expect("couldn't load file")).is_ok());
     }
 }
