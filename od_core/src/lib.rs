@@ -364,6 +364,7 @@ pub fn init_list() -> Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler +
 
     let mut result = Vec::new();
     for handle in disassembler_handles {
+        let mut handle = core::mem::ManuallyDrop::new(handle); // TODO: Do something proper here
         let init: rustcall!(
             extern "rustcall" fn() -> xlang_abi::traits::DynBox<
                 dyn abi_safe::Disassembler + Send + Sync,
