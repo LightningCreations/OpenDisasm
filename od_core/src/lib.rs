@@ -394,3 +394,14 @@ pub fn load_file(file: File) -> Result<TreeNode> {
     }
     Err(Error::Unrecognized)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::load_file;
+    use std::fs::File;
+
+    #[test]
+    fn infra_is_sane() {
+        assert!(load_file(File::open("tests/empty_elf.bin").expect("couldn't load file")).is_ok());
+    }
+}
