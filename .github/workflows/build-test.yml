@@ -23,4 +23,5 @@ jobs:
         rustup toolchain add nightly
     - name: Build
       run: cargo +nightly build --verbose
-
+    - name: Test
+      run: cargo +nightly test --verbose
