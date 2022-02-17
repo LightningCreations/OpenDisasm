@@ -13,7 +13,7 @@ use xlang_abi::traits::DynMut;
 use xlang_host::{dso::Handle, rustcall};
 
 pub mod abi_safe {
-    pub use super::structure::TreeNode;
+    pub use super::structure::{Leaf, NodeState, TreeNode};
     use xlang_abi::alloc::Allocator;
     use xlang_abi::io::Read;
     use xlang_abi::traits::{

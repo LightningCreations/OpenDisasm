@@ -1,5 +1,7 @@
 use xlang_abi::prelude::v1::*;
 
+use std::sync::atomic::{AtomicU64, Ordering};
+
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[repr(u8)]
 pub enum IntClass {
@@ -48,6 +50,14 @@ pub struct FilePosition {
 #[repr(transparent)]
 pub struct NodeId(u64);
 
+static NEXT_ID: AtomicU64 = AtomicU64::new(1);
+
+impl NodeId {
+    pub fn new() -> Self {
+        NodeId(NEXT_ID.fetch_add(1, Ordering::Relaxed))
+    }
+}
+
 #[derive(Clone, Debug)]
 #[repr(u8)]
 pub enum NodeState {
@@ -91,4 +101,19 @@ pub struct TreeNode {
     format: Option<String>,
     id: NodeId,
     has_incomplete_children: bool,
+}
+
+impl TreeNode {
+    pub fn empty(disasm_id: String) -> Self {
+        Self {
+            state: NodeState::List {
+                typename: String::from("<none>"),
+                value: Vec::new(),
+            },
+            disasm_id,
+            format: None,
+            id: NodeId::new(),
+            has_incomplete_children: false,
+        }
+    }
 }
