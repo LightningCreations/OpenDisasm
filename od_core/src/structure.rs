@@ -48,7 +48,7 @@ pub struct FilePosition {
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 #[repr(transparent)]
-pub struct NodeId(u64);
+pub struct NodeId(pub u64);
 
 static NEXT_ID: AtomicU64 = AtomicU64::new(1);
 
@@ -93,14 +93,15 @@ pub enum NodeState {
     },
 }
 
+// TODO: change `pub` to accessors
 #[derive(Clone, Debug)]
 #[repr(C)]
 pub struct TreeNode {
-    state: NodeState,
-    disasm_id: String,
-    format: Option<String>,
-    id: NodeId,
-    has_incomplete_children: bool,
+    pub state: NodeState,
+    pub disasm_id: String,
+    pub format: Option<String>,
+    pub id: NodeId,
+    pub has_incomplete_children: bool,
 }
 
 impl TreeNode {

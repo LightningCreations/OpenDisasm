@@ -1,0 +1,81 @@
+import { Button, HorizontalBox, ListView, ScrollView, VerticalBox } from "std-widgets.slint";
+
+export struct VisualTreeNode := {
+    expanded: bool,
+    id: int,
+    indent: int,
+    name: string,
+}
+
+export struct SubMenuItem := {
+    name: string,
+}
+
+export struct MenuItem := {
+    name: string,
+    children: [SubMenuItem],
+}
+
+Main := Window {
+    property<length> tree-view-item-height: 20px;
+    property<[VisualTreeNode]> tree: [];
+    callback expand(int, bool);
+    property<[MenuItem]> menu-items;
+    callback menu-button-clicked(string);
+    preferred-width: 1280px;
+    preferred-height: 720px;
+    VerticalBox {
+        HorizontalBox {
+            height: 15px;
+            for menu-item in menu-items : VerticalBox {
+                Rectangle { 
+                    Text {
+                        text: menu-item.name;
+                    }
+                    TouchArea {
+                        clicked => {
+                            popup.show();
+                            menu-button-clicked(menu-item.name);
+                        }
+                    }
+                }
+                popup := PopupWindow {
+                    VerticalBox {
+                        for child in menu-item.children : Text {
+                            text: child.name;
+                        }
+                    }
+                }
+            }
+            Rectangle {
+                horizontal-stretch: 1;
+            }
+        }
+        HorizontalBox {
+            ListView {
+                width: 25%;
+                for node in root.tree : HorizontalLayout {
+                    height: tree-view-item-height;
+                    padding-left: node.indent * tree-view-item-height * 2;
+                    Button {
+                        width: tree-view-item-height * 3 / 4;
+                        text: node.expanded ? "-" : "+";
+                        clicked => {
+                            node.expanded = !node.expanded;
+                            root.expand(node.id, node.expanded);
+                        }
+                    }
+                    Text {
+                        text: node.name;
+                        font-size: tree-view-item-height * 3 / 4;
+                    }
+                }
+            }
+            VerticalBox {
+                width: 50%;
+                Text { text: "Hello"; }
+            }
+        }
+    }
+}
+
