@@ -1,4 +1,4 @@
 [workspace]
 resolver = "2"
-members = ["modules/elf", "od_core", "od_gui_iced", "od_gui_slint", "od_interface"]
-default-members = ["od_gui_slint"]
+members = ["modules/elf", "od_core", "od_gui_egui", "od_interface"]
+default-members = ["od_gui_egui"]

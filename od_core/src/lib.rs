@@ -325,6 +325,7 @@ pub fn init_list() -> Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler +
     search_paths.push({
         let mut my_path = std::env::current_exe().unwrap();
         my_path.pop();
+        my_path.push("deps");
         my_path
     });
 

@@ -1,0 +1,11 @@
+[package]
+name = "od_gui_egui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+od_core = { path = "../od_core" }
+od_module_elf = { path = "../modules/elf" }
+eframe = "0.17.0"
+rfd = "0.8.1"
+tokio = { version = "1.17.0", features = ["full"] }
