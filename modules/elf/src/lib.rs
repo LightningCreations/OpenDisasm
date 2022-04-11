@@ -6,7 +6,7 @@ use xlang_abi::result::Result::Ok;
 use xlang_abi::span::SpanMut;
 use xlang_host::rustcall;
 
-use od_core::abi_safe::{Disassembler, TreeNode};
+use od_core::abi_safe::{Disassembler, NodeId, NodeState, TreeNode};
 
 struct ElfDisassembler {}
 
@@ -37,9 +37,32 @@ impl Disassembler for ElfDisassembler {
 
     fn disassemble<'a>(
         &self,
-        _: DynMut<dyn xlang_abi::io::Read + 'a>,
+        mut input: DynMut<dyn xlang_abi::io::Read + 'a>,
     ) -> xlang_abi::result::Result<TreeNode, od_core::abi_safe::Error> {
-        Ok(TreeNode::empty(String::from("elf")))
+        let mut result = HashMap::new();
+        let mut order = Vec::new();
+        let mut e_ident = [0u8; 16];
+        input.read(SpanMut::new(&mut e_ident));
+        let ei_class = e_ident[4];
+        result.insert(String::from("ei_class"), TreeNode {
+            state: ei_class.into(),
+            disasm_id: String::from("elf"),
+            format: Some(String::from("elf")),
+            id: NodeId::new(),
+            has_incomplete_children: false,
+        });
+        order.push(String::from("ei_class"));
+        Ok(TreeNode {
+            state: NodeState::Object {
+                typename: String::from("ElfHeader"),
+                value: result,
+                order,
+            },
+            disasm_id: String::from("elf"),
+            format: Some(String::from("elf")),
+            id: NodeId::new(),
+            has_incomplete_children: false,
+        })
     }
 }
 

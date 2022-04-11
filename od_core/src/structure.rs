@@ -14,6 +14,10 @@ pub enum IntClass {
 #[derive(Clone, Debug, Hash, PartialEq)]
 #[repr(u8)]
 pub enum Leaf {
+    Enum {
+        val: u128,
+        names: Vec<Pair<u128, String>>,
+    },
     ExtInt {
         val: Vec<u8>,
         size: u16,
@@ -91,6 +95,19 @@ pub enum NodeState {
         head_id: NodeId,
         index_in_file: FilePosition,
     },
+}
+
+impl From<u8> for NodeState {
+    fn from(val: u8) -> Self {
+        Self::Leaf {
+            typename: String::from("u8"),
+            value: Leaf::Int {
+                val: val as u128,
+                size: 8,
+                class: IntClass::Unsigned,
+            },
+        }
+    }
 }
 
 // TODO: change `pub` to accessors

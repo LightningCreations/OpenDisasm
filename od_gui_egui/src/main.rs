@@ -1,5 +1,5 @@
 use eframe::{egui, epi};
-use od_core::structure::{NodeState, TreeNode};
+use od_core::structure::{IntClass, Leaf, NodeState, TreeNode};
 use std::fs::File;
 use std::ops::Deref;
 use std::sync::{Arc, RwLock};
@@ -13,10 +13,23 @@ struct OpenDisasmApp {
 impl OpenDisasmApp {
     fn render_node(tree: &TreeNode, name: &str, ui: &mut egui::Ui) {
         match &tree.state {
+            NodeState::Leaf { typename, value } => {
+                ui.label(format!("{}: {} ({})", name, typename, match value {
+                    Leaf::Int { val, class: IntClass::Unsigned, .. } => format!("{}", val),
+                    x => todo!("{:?}", x),
+                }));
+            }
             NodeState::List { typename, value } => {
                 ui.collapsing(format!("{}: {}", name, typename), |ui| {
                     for (i, node) in value.iter().enumerate() {
                         Self::render_node(node, &format!("{}", i), ui);
+                    }
+                });
+            }
+            NodeState::Object { typename, value, order } => {
+                ui.collapsing(format!("{}: {}", name, typename), |ui| {
+                    for field in order {
+                        Self::render_node(value.get(field).unwrap(), field, ui);
                     }
                 });
             }
