@@ -54,3 +54,25 @@ pub extern "C" fn xlang_on_allocation_failure(size: usize, align: usize) -> ! {
     );
     std::process::abort()
 }
+
+#[no_mangle]
+pub static XLANG_HASH_SEED: u8 = 31u8;
+
+const PRIME: u64 = 99_194_853_094_755_497;
+
+lazy_static::lazy_static! {
+    static ref HASH_SEED_ACTUAL: u64 = rand::random::<u64>()^14_695_981_039_346_656_037;
+}
+
+xlang_host::rustcall! {
+    #[no_mangle]
+    pub extern "rustcall" fn xlang_hash_bytes(bytes: xlang_abi::span::Span<u8>) -> u64{
+        let mut hash = *HASH_SEED_ACTUAL;
+
+        for &byte in bytes{
+            hash ^= u64::from(byte);
+            hash = hash.wrapping_mul(PRIME);
+        }
+        hash
+    }
+}

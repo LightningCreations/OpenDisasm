@@ -16,7 +16,7 @@ pub enum IntClass {
 pub enum Leaf {
     Enum {
         val: u128,
-        names: Vec<Pair<u128, String>>,
+        names: HashMap<u128, String>,
     },
     ExtInt {
         val: Vec<u8>,
@@ -41,6 +41,12 @@ pub enum Leaf {
         val: Vec<u8>,
         name: String,
     },
+}
+
+impl Leaf {
+    pub fn new_enum(val: u128, names: HashMap<u128, String>) -> Self {
+        Leaf::Enum { val, names }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -101,6 +107,12 @@ pub enum NodeState {
         head_id: NodeId,
         index_in_file: FilePosition,
     },
+}
+
+impl NodeState {
+    pub fn new_enum<S: AsRef<str> + ?Sized>(typename: &S, val: u128, names: HashMap<u128, String>) -> Self {
+        Self::Leaf { typename: typename.into(), value: Leaf::new_enum(val, names) }
+    }
 }
 
 impl From<u8> for NodeState {

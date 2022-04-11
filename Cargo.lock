@@ -1429,6 +1429,8 @@ dependencies = [
 name = "od_interface"
 version = "0.1.0"
 dependencies = [
+ "lazy_static",
+ "rand",
  "xlang_abi",
  "xlang_host",
 ]
@@ -1437,6 +1439,7 @@ dependencies = [
 name = "od_module_elf"
 version = "0.1.0"
 dependencies = [
+ "lazy_static",
  "od_core",
  "xlang_abi",
  "xlang_host",
@@ -1625,9 +1628,9 @@ dependencies = [
 
 [[package]]
 name = "quote"
-version = "1.0.17"
+version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "632d02bff7f874a36f33ea8bb416cd484b90cc66c1194b1a1110d067a7013f58"
+checksum = "a1feb54ed693b93a84e14094943b84b7c4eae204c512b7ccb95ab0c66d278ad1"
 dependencies = [
  "proc-macro2",
 ]
@@ -2500,9 +2503,9 @@ dependencies = [
 
 [[package]]
 name = "xlang_abi"
-version = "0.1.3"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dfc322b063ffbc630d466ec0c2d03379b7f6d4a556424aa474bae64d41e55947"
+checksum = "a583b86daaf98be3dc6ed8f11cdf5bf780e849b02ab5bd730712a05e4748b9df"
 dependencies = [
  "xlang_host",
 ]

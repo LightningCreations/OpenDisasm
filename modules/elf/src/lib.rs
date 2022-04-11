@@ -1,5 +1,7 @@
 use xlang_abi::prelude::v1::*;
 
+use lazy_static::lazy_static;
+
 use xlang_abi::io::Read;
 use xlang_abi::result::Result::Err;
 use xlang_abi::result::Result::Ok;
@@ -15,6 +17,38 @@ impl ElfDisassembler {
     fn new() -> ElfDisassembler {
         ElfDisassembler {}
     }
+}
+
+lazy_static! {
+    static ref ELF_CLASS: HashMap<u128, String> = {
+        let mut m = HashMap::new();
+        m.insert(0, "ElfClassNone".into());
+        m.insert(1, "ElfClass32".into());
+        m.insert(2, "ElfClass64".into());
+        m
+    };
+
+    static ref ELF_DATA: HashMap<u128, String> = {
+        let mut m = HashMap::new();
+        m.insert(0, "ElfDataNone".into());
+        m.insert(1, "ElfData32".into());
+        m.insert(2, "ElfData64".into());
+        m
+    };
+
+    static ref ELF_OSABI: HashMap<u128, String> = {
+        let mut m = HashMap::new();
+        m.insert(0, "ElfOsAbiNone".into());
+        m.insert(1, "ElfOsAbiHpUx".into());
+        m
+    };
+
+    static ref ELF_VERSION: HashMap<u128, String> = {
+        let mut m = HashMap::new();
+        m.insert(0, "ElfVersionNone".into());
+        m.insert(1, "ElfVersionCurrent".into());
+        m
+    };
 }
 
 impl Disassembler for ElfDisassembler {
@@ -44,10 +78,12 @@ impl Disassembler for ElfDisassembler {
         let mut e_ident = [0u8; 16];
         input.read(SpanMut::new(&mut e_ident));
         let ei_class = e_ident[4];
+        println!("{:?}", *ELF_CLASS);
+        println!("{:?}", ELF_CLASS.clone());
         result.insert(
             String::from("ei_class"),
             TreeNode {
-                state: ei_class.into(),
+                state: NodeState::new_enum("ElfClass", ei_class as u128, ELF_CLASS.clone()),
                 disasm_id: String::from("elf"),
                 ..TreeNode::default()
             },
@@ -57,7 +93,7 @@ impl Disassembler for ElfDisassembler {
         result.insert(
             String::from("ei_data"),
             TreeNode {
-                state: ei_data.into(),
+                state: NodeState::new_enum("ElfData", ei_data as u128, ELF_DATA.clone()),
                 disasm_id: String::from("elf"),
                 ..TreeNode::default()
             },
@@ -67,7 +103,7 @@ impl Disassembler for ElfDisassembler {
         result.insert(
             String::from("ei_version"),
             TreeNode {
-                state: ei_version.into(),
+                state: NodeState::new_enum("ElfVersion", ei_version as u128, ELF_VERSION.clone()),
                 disasm_id: String::from("elf"),
                 ..TreeNode::default()
             },
@@ -77,7 +113,7 @@ impl Disassembler for ElfDisassembler {
         result.insert(
             String::from("ei_osabi"),
             TreeNode {
-                state: ei_osabi.into(),
+                state: NodeState::new_enum("ElfOsAbi", ei_osabi as u128, ELF_OSABI.clone()),
                 disasm_id: String::from("elf"),
                 ..TreeNode::default()
             },
