@@ -49,9 +49,7 @@ impl Disassembler for ElfDisassembler {
             TreeNode {
                 state: ei_class.into(),
                 disasm_id: String::from("elf"),
-                format: Some(String::from("elf")),
-                id: NodeId::new(),
-                has_incomplete_children: false,
+                ..TreeNode::default()
             },
         );
         order.push(String::from("ei_class"));

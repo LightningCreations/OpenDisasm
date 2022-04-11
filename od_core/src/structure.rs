@@ -62,6 +62,12 @@ impl NodeId {
     }
 }
 
+impl Default for NodeId {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[derive(Clone, Debug)]
 #[repr(u8)]
 pub enum NodeState {
@@ -133,5 +139,11 @@ impl TreeNode {
             id: NodeId::new(),
             has_incomplete_children: false,
         }
+    }
+}
+
+impl Default for TreeNode {
+    fn default() -> Self {
+        Self::empty(String::from("<none>"))
     }
 }
