@@ -14,10 +14,19 @@ impl OpenDisasmApp {
     fn render_node(tree: &TreeNode, name: &str, ui: &mut egui::Ui) {
         match &tree.state {
             NodeState::Leaf { typename, value } => {
-                ui.label(format!("{}: {} ({})", name, typename, match value {
-                    Leaf::Int { val, class: IntClass::Unsigned, .. } => format!("{}", val),
-                    x => todo!("{:?}", x),
-                }));
+                ui.label(format!(
+                    "{}: {} ({})",
+                    name,
+                    typename,
+                    match value {
+                        Leaf::Int {
+                            val,
+                            class: IntClass::Unsigned,
+                            ..
+                        } => format!("{}", val),
+                        x => todo!("{:?}", x),
+                    }
+                ));
             }
             NodeState::List { typename, value } => {
                 ui.collapsing(format!("{}: {}", name, typename), |ui| {
@@ -26,7 +35,11 @@ impl OpenDisasmApp {
                     }
                 });
             }
-            NodeState::Object { typename, value, order } => {
+            NodeState::Object {
+                typename,
+                value,
+                order,
+            } => {
                 ui.collapsing(format!("{}: {}", name, typename), |ui| {
                     for field in order {
                         Self::render_node(value.get(field).unwrap(), field, ui);

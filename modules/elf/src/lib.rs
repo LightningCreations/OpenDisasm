@@ -44,13 +44,16 @@ impl Disassembler for ElfDisassembler {
         let mut e_ident = [0u8; 16];
         input.read(SpanMut::new(&mut e_ident));
         let ei_class = e_ident[4];
-        result.insert(String::from("ei_class"), TreeNode {
-            state: ei_class.into(),
-            disasm_id: String::from("elf"),
-            format: Some(String::from("elf")),
-            id: NodeId::new(),
-            has_incomplete_children: false,
-        });
+        result.insert(
+            String::from("ei_class"),
+            TreeNode {
+                state: ei_class.into(),
+                disasm_id: String::from("elf"),
+                format: Some(String::from("elf")),
+                id: NodeId::new(),
+                has_incomplete_children: false,
+            },
+        );
         order.push(String::from("ei_class"));
         Ok(TreeNode {
             state: NodeState::Object {
