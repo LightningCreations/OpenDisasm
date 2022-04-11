@@ -53,6 +53,46 @@ impl Disassembler for ElfDisassembler {
             },
         );
         order.push(String::from("ei_class"));
+        let ei_data = e_ident[5];
+        result.insert(
+            String::from("ei_data"),
+            TreeNode {
+                state: ei_data.into(),
+                disasm_id: String::from("elf"),
+                ..TreeNode::default()
+            },
+        );
+        order.push(String::from("ei_data"));
+        let ei_version = e_ident[6];
+        result.insert(
+            String::from("ei_version"),
+            TreeNode {
+                state: ei_version.into(),
+                disasm_id: String::from("elf"),
+                ..TreeNode::default()
+            },
+        );
+        order.push(String::from("ei_version"));
+        let ei_osabi = e_ident[7];
+        result.insert(
+            String::from("ei_osabi"),
+            TreeNode {
+                state: ei_osabi.into(),
+                disasm_id: String::from("elf"),
+                ..TreeNode::default()
+            },
+        );
+        order.push(String::from("ei_osabi"));
+        let ei_abiversion = e_ident[8];
+        result.insert(
+            String::from("ei_abiversion"),
+            TreeNode {
+                state: ei_abiversion.into(),
+                disasm_id: String::from("elf"),
+                ..TreeNode::default()
+            },
+        );
+        order.push(String::from("ei_abiversion"));
         Ok(TreeNode {
             state: NodeState::Object {
                 typename: String::from("ElfHeader"),
