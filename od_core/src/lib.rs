@@ -6,6 +6,7 @@ extern "C" {}
 pub mod structure;
 
 use std::fs::File;
+use std::io::Seek;
 use std::lazy::SyncOnceCell;
 use structure::TreeNode;
 use xlang_abi::io::ReadAdapter;
@@ -381,11 +382,15 @@ pub fn init_list() -> Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler +
 pub fn load_file(file: File) -> Result<TreeNode> {
     let disassemblers = DISASSEMBLERS.get_or_init(init_list);
     for disassembler in disassemblers {
-        if Result::from(
-            disassembler
-                .can_read(DynMut::unsize_mut(&mut ReadAdapter::new(&file)))
-                .map_err(Into::into),
-        )? {
+        if {
+            let result = Result::from(
+                disassembler
+                    .can_read(DynMut::unsize_mut(&mut ReadAdapter::new(&file)))
+                    .map_err(Into::into),
+            )?;
+            (&file).rewind().unwrap();
+            result
+        } {
             return Result::from(
                 disassembler
                     .disassemble(DynMut::unsize_mut(&mut ReadAdapter::new(file)))
