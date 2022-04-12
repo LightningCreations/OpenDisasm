@@ -78,8 +78,6 @@ impl Disassembler for ElfDisassembler {
         let mut e_ident = [0u8; 16];
         input.read(SpanMut::new(&mut e_ident));
         let ei_class = e_ident[4];
-        println!("{:?}", *ELF_CLASS);
-        println!("{:?}", ELF_CLASS.clone());
         result.insert(
             String::from("ei_class"),
             TreeNode {
@@ -129,6 +127,34 @@ impl Disassembler for ElfDisassembler {
             },
         );
         order.push(String::from("ei_abiversion"));
+        let read_u16 = |mut input: DynMut<dyn xlang_abi::io::Read + '_>| {
+            let mut buffer = [0u8; 2];
+            input.read(SpanMut::new(&mut buffer));
+            if ei_data == 2 {
+                (u16::from(buffer[0]) << 8) | u16::from(buffer[1])
+            } else {
+                u16::from(buffer[0]) | (u16::from(buffer[1]) << 8)
+            }
+        };
+        let read_u32 = |mut input: DynMut<dyn xlang_abi::io::Read + '_>| {
+            let mut buffer = [0u8; 4];
+            input.read(SpanMut::new(&mut buffer));
+            if ei_data == 2 {
+                (u32::from(buffer[0]) << 24) | (u32::from(buffer[1]) << 16) | (u32::from(buffer[2]) << 8) | u32::from(buffer[3])
+            } else {
+                u32::from(buffer[0]) | (u32::from(buffer[1]) << 8) | (u32::from(buffer[2]) << 16) | (u32::from(buffer[3]) << 24)
+            }
+        };
+        let e_type = read_u16(input);
+        result.insert(
+            String::from("e_type"),
+            TreeNode {
+                state: e_type.into(),
+                disasm_id: String::from("elf"),
+                ..TreeNode::default()
+            },
+        );
+        order.push(String::from("e_type"));
         Ok(TreeNode {
             state: NodeState::Object {
                 typename: String::from("ElfHeader"),

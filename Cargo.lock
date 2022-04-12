@@ -2503,9 +2503,9 @@ dependencies = [
 
 [[package]]
 name = "xlang_abi"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a583b86daaf98be3dc6ed8f11cdf5bf780e849b02ab5bd730712a05e4748b9df"
+checksum = "6d3c88d4208cd006a57fed564c5b5af40bcee2680e8fc6d94be04e92810132fa"
 dependencies = [
  "xlang_host",
 ]

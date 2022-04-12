@@ -128,6 +128,45 @@ impl From<u8> for NodeState {
     }
 }
 
+impl From<u16> for NodeState {
+    fn from(val: u16) -> Self {
+        Self::Leaf {
+            typename: String::from("u16"),
+            value: Leaf::Int {
+                val: val as u128,
+                size: 16,
+                class: IntClass::Unsigned,
+            },
+        }
+    }
+}
+
+impl From<u32> for NodeState {
+    fn from(val: u32) -> Self {
+        Self::Leaf {
+            typename: String::from("u32"),
+            value: Leaf::Int {
+                val: val as u128,
+                size: 32,
+                class: IntClass::Unsigned,
+            },
+        }
+    }
+}
+
+impl From<u64> for NodeState {
+    fn from(val: u64) -> Self {
+        Self::Leaf {
+            typename: String::from("u64"),
+            value: Leaf::Int {
+                val: val as u128,
+                size: 64,
+                class: IntClass::Unsigned,
+            },
+        }
+    }
+}
+
 // TODO: change `pub` to accessors
 #[derive(Clone, Debug)]
 #[repr(C)]

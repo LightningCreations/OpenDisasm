@@ -19,6 +19,10 @@ impl OpenDisasmApp {
                     name,
                     typename,
                     match value {
+                        Leaf::Enum {
+                            val,
+                            names,
+                        } => format!("{} = {}", val, names[val]),
                         Leaf::Int {
                             val,
                             class: IntClass::Unsigned,
