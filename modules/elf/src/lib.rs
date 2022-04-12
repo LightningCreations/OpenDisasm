@@ -34,6 +34,24 @@ lazy_static! {
         m.insert(2, "ElfData64".into());
         m
     };
+    static ref ELF_MACHINE: HashMap<u128, String> = {
+        let mut m = HashMap::new();
+        m.insert(0, "ElfMachineNone".into());
+        m.insert(3, "ElfMachineX86".into());
+        m.insert(0x28, "ElfMachineArm".into());
+        m.insert(0x32, "ElfMachineIA64".into());
+        m.insert(0x3E, "ElfMachineAmd64".into());
+        m.insert(0xB7, "ElfMachineArm64".into());
+        m.insert(0xF3, "ElfMachineRiscV".into());
+        m.insert(0x101, "ElfMachineW65".into());
+        m
+    };
+    static ref ELF_OSABI: HashMap<u128, String> = {
+        let mut m = HashMap::new();
+        m.insert(0, "ElfOsAbiNone".into());
+        m.insert(1, "ElfOsAbiHpUx".into());
+        m
+    };
     static ref ELF_TYPE: HashMap<u128, String> = {
         let mut m = HashMap::new();
         m.insert(0, "ElfTypeNone".into());
@@ -41,12 +59,6 @@ lazy_static! {
         m.insert(2, "ElfTypeExecutable".into());
         m.insert(3, "ElfTypeDynamic".into());
         m.insert(4, "ElfTypeCore".into());
-        m
-    };
-    static ref ELF_OSABI: HashMap<u128, String> = {
-        let mut m = HashMap::new();
-        m.insert(0, "ElfOsAbiNone".into());
-        m.insert(1, "ElfOsAbiHpUx".into());
         m
     };
     static ref ELF_VERSION: HashMap<u128, String> = {
@@ -157,7 +169,7 @@ impl Disassembler for ElfDisassembler {
                     | (u32::from(buffer[3]) << 24)
             }
         };
-        let e_type = read_u16(input);
+        let e_type = read_u16(input.reborrow_mut());
         result.insert(
             String::from("e_type"),
             TreeNode {
@@ -167,6 +179,16 @@ impl Disassembler for ElfDisassembler {
             },
         );
         order.push(String::from("e_type"));
+        let e_machine = read_u16(input.reborrow_mut());
+        result.insert(
+            String::from("e_machine"),
+            TreeNode {
+                state: NodeState::new_enum("ElfMachine", e_machine.into(), ELF_MACHINE.clone()),
+                disasm_id: String::from("elf"),
+                ..TreeNode::default()
+            },
+        );
+        order.push(String::from("e_machine"));
         Ok(TreeNode {
             state: NodeState::Object {
                 typename: String::from("ElfHeader"),
