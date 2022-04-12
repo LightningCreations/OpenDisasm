@@ -27,7 +27,6 @@ lazy_static! {
         m.insert(2, "ElfClass64".into());
         m
     };
-
     static ref ELF_DATA: HashMap<u128, String> = {
         let mut m = HashMap::new();
         m.insert(0, "ElfDataNone".into());
@@ -35,14 +34,12 @@ lazy_static! {
         m.insert(2, "ElfData64".into());
         m
     };
-
     static ref ELF_OSABI: HashMap<u128, String> = {
         let mut m = HashMap::new();
         m.insert(0, "ElfOsAbiNone".into());
         m.insert(1, "ElfOsAbiHpUx".into());
         m
     };
-
     static ref ELF_VERSION: HashMap<u128, String> = {
         let mut m = HashMap::new();
         m.insert(0, "ElfVersionNone".into());
@@ -140,9 +137,15 @@ impl Disassembler for ElfDisassembler {
             let mut buffer = [0u8; 4];
             input.read(SpanMut::new(&mut buffer));
             if ei_data == 2 {
-                (u32::from(buffer[0]) << 24) | (u32::from(buffer[1]) << 16) | (u32::from(buffer[2]) << 8) | u32::from(buffer[3])
+                (u32::from(buffer[0]) << 24)
+                    | (u32::from(buffer[1]) << 16)
+                    | (u32::from(buffer[2]) << 8)
+                    | u32::from(buffer[3])
             } else {
-                u32::from(buffer[0]) | (u32::from(buffer[1]) << 8) | (u32::from(buffer[2]) << 16) | (u32::from(buffer[3]) << 24)
+                u32::from(buffer[0])
+                    | (u32::from(buffer[1]) << 8)
+                    | (u32::from(buffer[2]) << 16)
+                    | (u32::from(buffer[3]) << 24)
             }
         };
         let e_type = read_u16(input);

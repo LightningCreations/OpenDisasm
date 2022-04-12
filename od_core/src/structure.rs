@@ -110,8 +110,15 @@ pub enum NodeState {
 }
 
 impl NodeState {
-    pub fn new_enum<S: AsRef<str> + ?Sized>(typename: &S, val: u128, names: HashMap<u128, String>) -> Self {
-        Self::Leaf { typename: typename.into(), value: Leaf::new_enum(val, names) }
+    pub fn new_enum<S: AsRef<str> + ?Sized>(
+        typename: &S,
+        val: u128,
+        names: HashMap<u128, String>,
+    ) -> Self {
+        Self::Leaf {
+            typename: typename.into(),
+            value: Leaf::new_enum(val, names),
+        }
     }
 }
 
