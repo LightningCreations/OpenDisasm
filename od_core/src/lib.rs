@@ -45,8 +45,9 @@ pub mod abi_safe {
         reserved_dealloc: Option<unsafe extern "C" fn(*mut ())>,
         can_read:
             rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn ReadSeek>) -> Result<bool>),
-        disassemble:
-            rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn ReadSeek>) -> Result<TreeNode>),
+        disassemble: rustcall!(
+            unsafe extern "rustcall" fn(*const (), DynMut<dyn ReadSeek>) -> Result<TreeNode>
+        ),
     }
 
     unsafe impl<'a> AbiSafeVTable<dyn Disassembler + 'a> for DisassemblerVTable {}
