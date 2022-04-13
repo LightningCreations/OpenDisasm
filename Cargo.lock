@@ -1411,7 +1411,7 @@ version = "0.1.0"
 dependencies = [
  "od_interface",
  "xlang_abi",
- "xlang_host",
+ "xlang_host 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1432,7 +1432,7 @@ dependencies = [
  "lazy_static",
  "rand",
  "xlang_abi",
- "xlang_host",
+ "xlang_host 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1442,7 +1442,7 @@ dependencies = [
  "lazy_static",
  "od_core",
  "xlang_abi",
- "xlang_host",
+ "xlang_host 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2503,11 +2503,10 @@ dependencies = [
 
 [[package]]
 name = "xlang_abi"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d3c88d4208cd006a57fed564c5b5af40bcee2680e8fc6d94be04e92810132fa"
+version = "0.1.7"
+source = "git+https://github.com/LightningCreations/lccc#3ab085be77ccc8c9fcbdf82226d471fad726452a"
 dependencies = [
- "xlang_host",
+ "xlang_host 0.1.1 (git+https://github.com/LightningCreations/lccc)",
 ]
 
 [[package]]
@@ -2515,6 +2514,11 @@ name = "xlang_host"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dab85a87c6ba8843634b33973ee6e24e534c8cc620e6455ffea5fc660e5725c9"
+
+[[package]]
+name = "xlang_host"
+version = "0.1.1"
+source = "git+https://github.com/LightningCreations/lccc#3ab085be77ccc8c9fcbdf82226d471fad726452a"
 
 [[package]]
 name = "xml-rs"

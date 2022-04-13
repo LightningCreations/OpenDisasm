@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 lazy_static = "1.4.0"
 od_core = { path = "../../od_core" }
-xlang_abi = "0.1.5"
+xlang_abi = { git = "https://github.com/LightningCreations/lccc" }
 xlang_host = "0.1.0"
 
 [lib]

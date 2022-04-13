@@ -9,14 +9,14 @@ use std::fs::File;
 use std::io::Seek;
 use std::lazy::SyncOnceCell;
 use structure::TreeNode;
-use xlang_abi::io::ReadAdapter;
+use xlang_abi::io::ReadSeekAdapter;
 use xlang_abi::traits::DynMut;
 use xlang_host::{dso::Handle, rustcall};
 
 pub mod abi_safe {
     pub use super::structure::{Leaf, NodeId, NodeState, TreeNode};
     use xlang_abi::alloc::Allocator;
-    use xlang_abi::io::Read;
+    use xlang_abi::io::ReadSeek;
     use xlang_abi::traits::{
         AbiSafeTrait, AbiSafeUnsize, AbiSafeVTable, DynBox, DynMut, DynPtrSafe,
     };
@@ -33,8 +33,8 @@ pub mod abi_safe {
     pub type Result<T> = xlang_abi::result::Result<T, Error>;
 
     pub trait Disassembler {
-        fn can_read<'a>(&self, file: DynMut<dyn Read + 'a>) -> Result<bool>;
-        fn disassemble<'a>(&self, file: DynMut<dyn Read + 'a>) -> Result<TreeNode>;
+        fn can_read<'a>(&self, file: DynMut<dyn ReadSeek + 'a>) -> Result<bool>;
+        fn disassemble<'a>(&self, file: DynMut<dyn ReadSeek + 'a>) -> Result<TreeNode>;
     }
 
     #[repr(C)]
@@ -44,9 +44,9 @@ pub mod abi_safe {
         destructor: Option<unsafe extern "C" fn(*mut ())>,
         reserved_dealloc: Option<unsafe extern "C" fn(*mut ())>,
         can_read:
-            rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn Read>) -> Result<bool>),
+            rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn ReadSeek>) -> Result<bool>),
         disassemble:
-            rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn Read>) -> Result<TreeNode>),
+            rustcall!(unsafe extern "rustcall" fn(*const (), DynMut<dyn ReadSeek>) -> Result<TreeNode>),
     }
 
     unsafe impl<'a> AbiSafeVTable<dyn Disassembler + 'a> for DisassemblerVTable {}
@@ -77,13 +77,13 @@ pub mod abi_safe {
     }
 
     rustcall! {
-        unsafe extern "rustcall" fn vtbl_can_read<T: Disassembler>(this: *const (), file: DynMut<dyn Read>) -> Result<bool> {
+        unsafe extern "rustcall" fn vtbl_can_read<T: Disassembler>(this: *const (), file: DynMut<dyn ReadSeek>) -> Result<bool> {
             <T as Disassembler>::can_read(&*(this.cast::<T>()), file)
         }
     }
 
     rustcall! {
-        unsafe extern "rustcall" fn vtbl_disassemble<T: Disassembler>(this: *const (), file: DynMut<dyn Read>) -> Result<TreeNode> {
+        unsafe extern "rustcall" fn vtbl_disassemble<T: Disassembler>(this: *const (), file: DynMut<dyn ReadSeek>) -> Result<TreeNode> {
             <T as Disassembler>::disassemble(&*(this.cast::<T>()), file)
         }
     }
@@ -144,7 +144,7 @@ pub mod abi_safe {
     where
         'a: 'lt,
     {
-        fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
+        fn can_read<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<bool> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -152,12 +152,12 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().can_read)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
 
-        fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
+        fn disassemble<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<TreeNode> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -165,7 +165,7 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().disassemble)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
@@ -175,7 +175,7 @@ pub mod abi_safe {
     where
         'a: 'lt,
     {
-        fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
+        fn can_read<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<bool> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -183,12 +183,12 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().can_read)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
 
-        fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
+        fn disassemble<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<TreeNode> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -196,7 +196,7 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().disassemble)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
@@ -206,7 +206,7 @@ pub mod abi_safe {
     where
         'a: 'lt,
     {
-        fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
+        fn can_read<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<bool> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -214,12 +214,12 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().can_read)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
 
-        fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
+        fn disassemble<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<TreeNode> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -227,7 +227,7 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().disassemble)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
@@ -237,7 +237,7 @@ pub mod abi_safe {
     where
         'a: 'lt,
     {
-        fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
+        fn can_read<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<bool> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -245,12 +245,12 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().can_read)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
 
-        fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
+        fn disassemble<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<TreeNode> {
             unsafe {
                 let this = std::mem::transmute::<
                     _,
@@ -258,7 +258,7 @@ pub mod abi_safe {
                 >(self);
                 (this.vtable().disassemble)(
                     this.as_raw(),
-                    std::mem::transmute::<_, DynMut<dyn Read + 'static>>(file),
+                    std::mem::transmute::<_, DynMut<dyn ReadSeek + 'static>>(file),
                 )
             }
         }
@@ -268,11 +268,11 @@ pub mod abi_safe {
     where
         dyn DynPtrSafe<T> + 'lt: Disassembler,
     {
-        fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
+        fn can_read<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<bool> {
             <dyn DynPtrSafe<T> as Disassembler>::can_read(&**self, file)
         }
 
-        fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
+        fn disassemble<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<TreeNode> {
             <dyn DynPtrSafe<T> as Disassembler>::disassemble(&**self, file)
         }
     }
@@ -281,11 +281,11 @@ pub mod abi_safe {
     where
         dyn DynPtrSafe<T> + 'lt: Disassembler,
     {
-        fn can_read<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<bool> {
+        fn can_read<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<bool> {
             <dyn DynPtrSafe<T> as Disassembler>::can_read(&**self, file)
         }
 
-        fn disassemble<'b>(&self, file: DynMut<dyn Read + 'b>) -> Result<TreeNode> {
+        fn disassemble<'b>(&self, file: DynMut<dyn ReadSeek + 'b>) -> Result<TreeNode> {
             <dyn DynPtrSafe<T> as Disassembler>::disassemble(&**self, file)
         }
     }
@@ -385,7 +385,7 @@ pub fn load_file(file: File) -> Result<TreeNode> {
         if {
             let result = Result::from(
                 disassembler
-                    .can_read(DynMut::unsize_mut(&mut ReadAdapter::new(&file)))
+                    .can_read(DynMut::unsize_mut(&mut ReadSeekAdapter::new(&file)))
                     .map_err(Into::into),
             )?;
             (&file).rewind().unwrap();
@@ -393,7 +393,7 @@ pub fn load_file(file: File) -> Result<TreeNode> {
         } {
             return Result::from(
                 disassembler
-                    .disassemble(DynMut::unsize_mut(&mut ReadAdapter::new(file)))
+                    .disassemble(DynMut::unsize_mut(&mut ReadSeekAdapter::new(file)))
                     .map_err(Into::into),
             );
         }
