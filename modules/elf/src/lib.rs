@@ -97,54 +97,54 @@ impl Disassembler for ElfDisassembler {
         input.read(SpanMut::new(&mut e_ident));
         let ei_class = e_ident[4];
         result.insert(
-            String::from("ei_class"),
+            "ei_class".into(),
             TreeNode {
                 state: NodeState::new_enum("ElfClass", ei_class.into(), ELF_CLASS.clone()),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("ei_class"));
+        order.push("ei_class".into());
         let ei_data = e_ident[5];
         result.insert(
-            String::from("ei_data"),
+            "ei_data".into(),
             TreeNode {
                 state: NodeState::new_enum("ElfData", ei_data.into(), ELF_DATA.clone()),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("ei_data"));
+        order.push("ei_data".into());
         let ei_version = e_ident[6];
         result.insert(
-            String::from("ei_version"),
+            "ei_version".into(),
             TreeNode {
                 state: NodeState::new_enum("ElfVersion", ei_version.into(), ELF_VERSION.clone()),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("ei_version"));
+        order.push("ei_version".into());
         let ei_osabi = e_ident[7];
         result.insert(
-            String::from("ei_osabi"),
+            "ei_osabi".into(),
             TreeNode {
                 state: NodeState::new_enum("ElfOsAbi", ei_osabi.into(), ELF_OSABI.clone()),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("ei_osabi"));
+        order.push("ei_osabi".into());
         let ei_abiversion = e_ident[8];
         result.insert(
-            String::from("ei_abiversion"),
+            "ei_abiversion".into(),
             TreeNode {
                 state: ei_abiversion.into(),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("ei_abiversion"));
+        order.push("ei_abiversion".into());
         let read_u16 = |mut input: DynMut<dyn xlang_abi::io::ReadSeek + '_>| {
             let mut buffer = [0u8; 2];
             input.read(SpanMut::new(&mut buffer));
@@ -201,48 +201,146 @@ impl Disassembler for ElfDisassembler {
         };
         let e_type = read_u16(input.reborrow_mut());
         result.insert(
-            String::from("e_type"),
+            "e_type".into(),
             TreeNode {
                 state: NodeState::new_enum("ElfType", e_type.into(), ELF_TYPE.clone()),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("e_type"));
+        order.push("e_type".into());
         let e_machine = read_u16(input.reborrow_mut());
         result.insert(
-            String::from("e_machine"),
+            "e_machine".into(),
             TreeNode {
                 state: NodeState::new_enum("ElfMachine", e_machine.into(), ELF_MACHINE.clone()),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("e_machine"));
+        order.push("e_machine".into());
         let e_version = read_u32(input.reborrow_mut());
         result.insert(
-            String::from("e_version"),
+            "e_version".into(),
             TreeNode {
                 state: NodeState::new_enum("ElfVersion", e_version.into(), ELF_VERSION.clone()),
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("e_version"));
+        order.push("e_version".into());
         let e_entry = read_addr(input.reborrow_mut());
         result.insert(
-            String::from("e_entry"),
+            "e_entry".into(),
             TreeNode {
                 state: if ei_class == 1 {
                     (e_entry as u32).into()
                 } else {
                     e_entry.into()
                 },
-                disasm_id: String::from("elf"),
+                disasm_id: "elf".into(),
                 ..TreeNode::default()
             },
         );
-        order.push(String::from("e_entry"));
+        order.push("e_entry".into());
+        let e_phoff = read_addr(input.reborrow_mut());
+        result.insert(
+            "e_phoff".into(),
+            TreeNode {
+                state: if ei_class == 1 {
+                    (e_phoff as u32).into()
+                } else {
+                    e_phoff.into()
+                },
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_phoff".into());
+        let e_shoff = read_addr(input.reborrow_mut());
+        result.insert(
+            "e_shoff".into(),
+            TreeNode {
+                state: if ei_class == 1 {
+                    (e_shoff as u32).into()
+                } else {
+                    e_shoff.into()
+                },
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_shoff".into());
+        let e_flags = read_u32(input.reborrow_mut());
+        result.insert(
+            "e_flags".into(),
+            TreeNode {
+                state: e_flags.into(),
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_flags".into());
+        let e_ehsize = read_u16(input.reborrow_mut());
+        result.insert(
+            "e_ehsize".into(),
+            TreeNode {
+                state: e_ehsize.into(),
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_ehsize".into());
+        let e_phentsize = read_u16(input.reborrow_mut());
+        result.insert(
+            "e_phentsize".into(),
+            TreeNode {
+                state: e_phentsize.into(),
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_phentsize".into());
+        let e_phnum = read_u16(input.reborrow_mut());
+        result.insert(
+            "e_phnum".into(),
+            TreeNode {
+                state: e_phnum.into(),
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_phnum".into());
+        let e_shentsize = read_u16(input.reborrow_mut());
+        result.insert(
+            "e_shentsize".into(),
+            TreeNode {
+                state: e_shentsize.into(),
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_shentsize".into());
+        let e_shnum = read_u16(input.reborrow_mut());
+        result.insert(
+            "e_shnum".into(),
+            TreeNode {
+                state: e_shnum.into(),
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_shnum".into());
+        let e_shstrndx = read_u16(input.reborrow_mut());
+        result.insert(
+            "e_shstrndx".into(),
+            TreeNode {
+                state: e_shstrndx.into(),
+                disasm_id: "elf".into(),
+                ..TreeNode::default()
+            },
+        );
+        order.push("e_shstrndx".into());
         Ok(TreeNode {
             state: NodeState::Object {
                 typename: String::from("ElfHeader"),
