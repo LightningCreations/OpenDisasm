@@ -122,6 +122,25 @@ impl NodeState {
     }
 }
 
+impl From<char> for Leaf {
+    fn from(val: char) -> Self {
+        Self::Int {
+            val: val as u128,
+            size: 32,
+            class: IntClass::Character,
+        }
+    }
+}
+
+impl From<char> for NodeState {
+    fn from(val: char) -> Self {
+        Self::Leaf {
+            typename: "char".into(),
+            value: val.into(),
+        }
+    }
+}
+
 impl From<u8> for NodeState {
     fn from(val: u8) -> Self {
         Self::Leaf {
@@ -170,6 +189,15 @@ impl From<u64> for NodeState {
                 size: 64,
                 class: IntClass::Unsigned,
             },
+        }
+    }
+}
+
+impl From<&str> for NodeState {
+    fn from(val: &str) -> Self {
+        Self::Array {
+            typename: "str".into(),
+            value: val.chars().map(Leaf::from).collect(),
         }
     }
 }
