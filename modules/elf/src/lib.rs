@@ -8,6 +8,9 @@ use xlang_host::rustcall;
 
 use od_core::abi_safe::{Disassembler, NodeId, NodeState, TreeNode};
 
+use arch_ops::traits::{Address, InsnRead};
+use arch_ops::x86::insn::{X86Decoder, X86Mode};
+
 #[repr(u32)]
 enum ProgramHeaderType {
     Null,
@@ -18,11 +21,15 @@ enum ProgramHeaderType {
     Shlib,
     Phdr,
     Tls,
+    GnuEhFrame = 0x6474E550,
+    GnuStack,
+    GnuRelro,
+    GnuProperty,
 }
 
 impl TryFrom<u32> for ProgramHeaderType {
-    type Error = ();
-    fn try_from(val: u32) -> std::result::Result<Self, ()> {
+    type Error = u32;
+    fn try_from(val: u32) -> std::result::Result<Self, u32> {
         match val {
             0 => std::result::Result::Ok(Self::Null),
             1 => std::result::Result::Ok(Self::Load),
@@ -32,7 +39,11 @@ impl TryFrom<u32> for ProgramHeaderType {
             5 => std::result::Result::Ok(Self::Shlib),
             6 => std::result::Result::Ok(Self::Phdr),
             7 => std::result::Result::Ok(Self::Tls),
-            _ => std::result::Result::Err(()),
+            0x6474E550 => std::result::Result::Ok(Self::GnuEhFrame),
+            0x6474E551 => std::result::Result::Ok(Self::GnuStack),
+            0x6474E552 => std::result::Result::Ok(Self::GnuRelro),
+            0x6474E553 => std::result::Result::Ok(Self::GnuProperty),
+            x => std::result::Result::Err(x),
         }
     }
 }
@@ -40,12 +51,11 @@ impl TryFrom<u32> for ProgramHeaderType {
 struct ProgramHeader {
     ty: ProgramHeaderType,
     flags: u32,
-    offset: u64,
     vaddr: u64,
     paddr: u64,
-    filesz: u64,
     memsz: u64,
     align: u64,
+    data: Vec<u8>,
 }
 
 struct SectionHeader {
@@ -53,12 +63,11 @@ struct SectionHeader {
     ty: u32, // TODO: replace with enum
     flags: u64,
     addr: u64,
-    offset: u64,
-    size: u64,
     link: u32,
     info: u32,
     addralign: u64,
     entsize: u64,
+    data: Vec<u8>,
 }
 
 struct ElfDisassembler;
@@ -86,6 +95,39 @@ impl ElfDisassembler {
             },
         );
         order.push(name.into());
+    }
+}
+
+struct ElfInsnRead {
+    e_machine: u16,
+    program_headers: Vec<ProgramHeader>,
+    section_headers: Vec<SectionHeader>,
+    location: u64,
+}
+
+impl ElfInsnRead {
+    fn new(e_machine: u16, program_headers: Vec<ProgramHeader>, section_headers: Vec<SectionHeader>) -> Self {
+        Self {
+            e_machine, program_headers, section_headers, location: 0,
+        }
+    }
+}
+
+impl std::io::Read for ElfInsnRead {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        todo!()
+    }
+}
+
+impl InsnRead for ElfInsnRead {
+    fn read_addr(&mut self, size: usize, rel: bool) -> std::io::Result<Address> {
+        todo!()
+    }
+}
+
+impl Seek for ElfInsnRead {
+    fn seek(&mut self, pos: SeekFrom) -> xlang_abi::io::Result<u64> {
+        todo!()
     }
 }
 
@@ -214,18 +256,23 @@ impl Disassembler for ElfDisassembler {
                 flags = read_u32(input.reborrow_mut());
             }
             let align = read_addr(input.reborrow_mut());
+            let mut data = xlang_abi::vec![0; filesz.try_into().unwrap()];
+            let cur_pos = input.seek(SeekFrom::Current(0)).unwrap();
+            input.seek(SeekFrom::Start(offset));
+            input.read(SpanMut::new(&mut data));
+            input.seek(SeekFrom::Start(cur_pos));
             program_headers.push(ProgramHeader {
                 ty: ty.try_into().unwrap(),
                 flags,
-                offset,
                 vaddr,
                 paddr,
-                filesz,
                 memsz,
                 align,
+                data,
             });
         }
 
+        input.seek(SeekFrom::Start(e_shoff));
         let mut section_headers = Vec::new();
         for _ in 0..e_shnum {
             let name = read_u32(input.reborrow_mut());
@@ -238,19 +285,31 @@ impl Disassembler for ElfDisassembler {
             let info = read_u32(input.reborrow_mut());
             let addralign = read_addr(input.reborrow_mut());
             let entsize = read_addr(input.reborrow_mut());
+            let mut data = xlang_abi::vec![0; size.try_into().unwrap()];
+            let cur_pos = input.seek(SeekFrom::Current(0)).unwrap();
+            input.seek(SeekFrom::Start(offset));
+            input.read(SpanMut::new(&mut data));
+            input.seek(SeekFrom::Start(cur_pos));
             section_headers.push(SectionHeader {
                 name,
                 ty,
                 flags,
                 addr,
-                offset,
-                size,
                 link,
                 info,
                 addralign,
                 entsize,
+                data,
             });
         }
+
+        let mut decoder = X86Decoder::new(ElfInsnRead::new(e_machine, program_headers, section_headers), X86Mode::Long);
+        // And now, the fun begins.
+        // We're going to start by disassembling one instruction.
+        // How hard could that possibly be?
+        
+        decoder.reader_mut().seek(SeekFrom::Start(e_entry));
+        let _ = decoder.read_insn();
 
         Ok(TreeNode {
             state: NodeState::Object {
