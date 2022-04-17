@@ -106,9 +106,16 @@ struct ElfInsnRead {
 }
 
 impl ElfInsnRead {
-    fn new(e_machine: u16, program_headers: Vec<ProgramHeader>, section_headers: Vec<SectionHeader>) -> Self {
+    fn new(
+        e_machine: u16,
+        program_headers: Vec<ProgramHeader>,
+        section_headers: Vec<SectionHeader>,
+    ) -> Self {
         Self {
-            e_machine, program_headers, section_headers, location: 0,
+            e_machine,
+            program_headers,
+            section_headers,
+            location: 0,
         }
     }
 }
@@ -303,11 +310,14 @@ impl Disassembler for ElfDisassembler {
             });
         }
 
-        let mut decoder = X86Decoder::new(ElfInsnRead::new(e_machine, program_headers, section_headers), X86Mode::Long);
+        let mut decoder = X86Decoder::new(
+            ElfInsnRead::new(e_machine, program_headers, section_headers),
+            X86Mode::Long,
+        );
         // And now, the fun begins.
         // We're going to start by disassembling one instruction.
         // How hard could that possibly be?
-        
+
         decoder.reader_mut().seek(SeekFrom::Start(e_entry));
         let _ = decoder.read_insn();
 
