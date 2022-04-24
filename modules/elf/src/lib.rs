@@ -138,10 +138,14 @@ impl Seek for ElfInsnRead {
     fn seek(&mut self, pos: SeekFrom) -> xlang_abi::io::Result<u64> {
         match pos {
             SeekFrom::Start(x) => self.location = x,
-            SeekFrom::Current(x) => if x < 0 && u64::try_from(-x).unwrap() > self.location {
-                return Err(xlang_abi::io::Error::Message("seek past start of file".into()))
-            } else {
-                self.location = self.location.wrapping_add_signed(x)
+            SeekFrom::Current(x) => {
+                if x < 0 && u64::try_from(-x).unwrap() > self.location {
+                    return Err(xlang_abi::io::Error::Message(
+                        "seek past start of file".into(),
+                    ));
+                } else {
+                    self.location = self.location.wrapping_add_signed(x)
+                }
             }
             SeekFrom::End(x) => unimplemented!(),
         }
