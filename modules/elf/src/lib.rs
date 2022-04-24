@@ -1,3 +1,5 @@
+#![feature(mixed_integer_ops)]
+
 use xlang_abi::prelude::v1::*;
 
 use xlang_abi::io::{Read, Seek, SeekFrom};
@@ -134,7 +136,16 @@ impl InsnRead for ElfInsnRead {
 
 impl Seek for ElfInsnRead {
     fn seek(&mut self, pos: SeekFrom) -> xlang_abi::io::Result<u64> {
-        todo!()
+        match pos {
+            SeekFrom::Start(x) => self.location = x,
+            SeekFrom::Current(x) => if x < 0 && u64::try_from(-x).unwrap() > self.location {
+                return Err(xlang_abi::io::Error::Message("seek past start of file".into()))
+            } else {
+                self.location = self.location.wrapping_add_signed(x)
+            }
+            SeekFrom::End(x) => unimplemented!(),
+        }
+        Ok(self.location)
     }
 }
 
@@ -319,7 +330,7 @@ impl Disassembler for ElfDisassembler {
         // How hard could that possibly be?
 
         decoder.reader_mut().seek(SeekFrom::Start(e_entry));
-        let _ = decoder.read_insn();
+        println!("{:?}", decoder.read_insn());
 
         Ok(TreeNode {
             state: NodeState::Object {
