@@ -7,7 +7,7 @@ pub mod structure;
 
 use std::fs::File;
 use std::io::Seek;
-use std::lazy::SyncOnceCell;
+use std::sync::OnceLock;
 use structure::TreeNode;
 use xlang_abi::io::ReadSeekAdapter;
 use xlang_abi::traits::DynMut;
@@ -317,9 +317,9 @@ impl From<abi_safe::Error> for Error {
 
 static DISASSEMBLER_NAMES: [&str; 1] = ["elf"];
 
-static DISASSEMBLERS: SyncOnceCell<
+static DISASSEMBLERS: OnceLock<
     Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler + Send + Sync>>,
-> = SyncOnceCell::new();
+> = OnceLock::new();
 
 #[allow(clippy::let_and_return)]
 pub fn init_list() -> Vec<xlang_abi::traits::DynBox<dyn abi_safe::Disassembler + Send + Sync>> {

@@ -8,4 +8,4 @@ edition = "2021"
 [dependencies]
 od_interface = { path = "../od_interface" }
 xlang_abi = { git = "https://github.com/LightningCreations/lccc" }
-xlang_host = "0.1.0"
+xlang_host = "0.1"

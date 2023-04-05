@@ -8,11 +8,11 @@ edition = "2021"
 [dependencies]
 arch-ops = { git = "https://github.com/LightningCreations/lc-binutils" }
 lazy_static = "1.4.0"
-num-traits = "0.2.14"
-num-derive = "0.3.3"
+num-traits = "0.2"
+num-derive = "0.3"
 od_core = { path = "../../od_core" }
 xlang_abi = { git = "https://github.com/LightningCreations/lccc" }
-xlang_host = "0.1.0"
+xlang_host = "0.1"
 
 [lib]
 crate-type = ["cdylib"]

@@ -1,4 +1,4 @@
-use eframe::{egui, epi};
+use eframe::egui;
 use od_core::structure::{IntClass, Leaf, NodeState, TreeNode};
 use std::fs::File;
 use std::ops::Deref;
@@ -52,12 +52,8 @@ impl OpenDisasmApp {
     }
 }
 
-impl epi::App for OpenDisasmApp {
-    fn name(&self) -> &str {
-        "OpenDisasm"
-    }
-
-    fn update(&mut self, ctx: &egui::Context, frame: &epi::Frame) {
+impl eframe::App for OpenDisasmApp {
+    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("file_menu").show(ctx, |ui| {
             ui.horizontal(|ui| {
                 ui.collapsing("File", |ui| {
@@ -100,7 +96,10 @@ impl epi::App for OpenDisasmApp {
 
 #[tokio::main]
 async fn main() {
-    let app = OpenDisasmApp::default();
     let native_options = eframe::NativeOptions::default();
-    eframe::run_native(Box::new(app), native_options);
+    eframe::run_native(
+        "OpenDisasm",
+        native_options,
+        Box::new(|cc| Box::new(OpenDisasmApp::default())),
+    );
 }
