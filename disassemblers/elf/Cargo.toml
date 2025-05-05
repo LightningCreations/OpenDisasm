@@ -1,0 +1,8 @@
+[package]
+name = "opendisasm-elf"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+mappable-rc.workspace = true
+opendisasm-core.workspace = true

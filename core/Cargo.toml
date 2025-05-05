@@ -1,0 +1,10 @@
+[package]
+name = "opendisasm-core"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+aliasable = "0.1"
+itertools = "0.14"
+mappable-rc.workspace = true
+parking_lot = "0.12.3"

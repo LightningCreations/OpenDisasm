@@ -1,0 +1,18 @@
+[workspace]
+members = [
+    "core",
+    "disassemblers/elf",
+    "gui/iced",
+]
+resolver = "2"
+default-members = ["gui/iced"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+
+[workspace.dependencies]
+mappable-rc = "0.1"
+opendisasm-core = { path = "core" }
+opendisasm-elf = { path = "disassemblers/elf" }
+rfd = "0.15"

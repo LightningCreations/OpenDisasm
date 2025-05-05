@@ -1,0 +1,11 @@
+[package]
+name = "opendisasm-gui-iced"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+iced_aw = "0.12"
+iced = "0.13"
+opendisasm-core.workspace = true
+opendisasm-elf.workspace = true
+rfd.workspace = true
