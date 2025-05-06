@@ -1,5 +1,7 @@
 use mappable_rc::Marc;
-use opendisasm_core::{DisassemblerFormat, DisassemblerState, NodeRef, RecognitionHit};
+use opendisasm_core::{
+    DisassemblerFormat, DisassemblerState, NodeBuilder, NodeRef, RecognitionHit,
+};
 
 pub struct ElfFormat;
 
@@ -49,7 +51,28 @@ struct ElfDisassemblerState {
 }
 
 impl DisassemblerState for ElfDisassemblerState {
-    fn cont(&mut self, _node: NodeRef) {
-        todo!()
+    fn cont(&mut self, node: NodeRef) {
+        let bits = self.data[4];
+        let endian = self.data[5];
+        let header = NodeBuilder::new()
+            .with_name("ELF Header")
+            .with_tree(vec![
+                NodeBuilder::new()
+                    .with_name("bits")
+                    .with_context(if bits == 2 { "64-bit" } else { "32-bit" })
+                    .with_number(bits)
+                    .build(),
+                NodeBuilder::new()
+                    .with_name("endian")
+                    .with_context(if endian == 2 {
+                        "big endian"
+                    } else {
+                        "little endian"
+                    })
+                    .with_number(endian)
+                    .build(),
+            ])
+            .build();
+        let _ = NodeBuilder::in_place(node).with_tree(vec![header]).build();
     }
 }

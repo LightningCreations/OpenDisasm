@@ -27,36 +27,35 @@ pub struct NodeRef(NonZero<usize>);
 
 impl NodeRef {
     pub fn new(node: Node) -> Self {
-        // SAFETY: we are immediately inserting the node
-        let key = unsafe { Self::reserve() };
+        let key = Self::reserve();
         key.insert(node);
         key
     }
 
     #[allow(clippy::significant_drop_tightening)] // False positive
-    fn smuggle_lock<'a>(self) -> &'a RwLock<Node> {
+    fn smuggle_lock<'a>(self) -> Option<&'a RwLock<Node>> {
         let root_lock = NODES.read();
-        let data = root_lock.get(&self).unwrap();
-        unsafe {
+        let data = root_lock.get(&self)?;
+        Some(unsafe {
             // Smuggle the reference so root_lock unlocks
             &*(&raw const **data).cast::<RwLock<Node>>()
-        }
+        })
     }
 
     pub fn get<'a>(self) -> RwLockReadGuard<'a, Node> {
-        self.smuggle_lock().read()
+        self.smuggle_lock().unwrap().read()
     }
 
     pub fn get_mut<'a>(self) -> RwLockWriteGuard<'a, Node> {
-        self.smuggle_lock().write()
+        self.smuggle_lock().unwrap().write()
     }
 
-    /// # Safety
-    /// Attempting to use `Self::get` or `Self::get_mut` before calling
-    /// `Self::insert` will panic, which is technically safe. However, in a
-    /// future version, this may be changed into undefined behavior.
+    pub fn try_get<'a>(self) -> Option<RwLockReadGuard<'a, Node>> {
+        self.smuggle_lock().map(|x| x.read())
+    }
+
     #[must_use]
-    pub unsafe fn reserve() -> Self {
+    pub fn reserve() -> Self {
         static COUNTER: AtomicUsize = AtomicUsize::new(1);
 
         Self(unsafe { NonZero::new(COUNTER.fetch_add(1, Ordering::SeqCst)).unwrap_unchecked() })
@@ -88,6 +87,7 @@ pub struct Node {
     this: NodeRef,
     parent: Option<NodeRef>,
     pub name: Option<String>,
+    pub context: Option<String>,
     body: NodeBody,
 }
 
@@ -157,6 +157,10 @@ impl Node {
             None
         }
     }
+
+    pub fn body(&self) -> &NodeBody {
+        &self.body
+    }
 }
 
 impl fmt::Debug for Node {
@@ -188,6 +192,7 @@ impl fmt::Debug for NodeBody {
 pub struct NodeBuilder<T = ()> {
     node: NodeRef,
     name: Option<String>,
+    context: Option<String>,
     data: T,
 }
 
@@ -196,6 +201,7 @@ pub struct PartialNodeData(Box<dyn DisassemblerState>);
 #[allow(dead_code)]
 pub struct ArrayNodeData(Vec<NodeRef>);
 pub struct TreeNodeData(Vec<NodeRef>);
+pub struct NumberNodeData(u64);
 
 impl<T: Default> NodeBuilder<T> {
     #[must_use]
@@ -205,10 +211,13 @@ impl<T: Default> NodeBuilder<T> {
 
     #[must_use]
     pub fn in_place(node: NodeRef) -> Self {
+        let name = node.try_get().and_then(|x| x.name.clone());
+        let context = node.try_get().and_then(|x| x.context.clone());
         Self {
             node,
             data: T::default(),
-            name: None,
+            name,
+            context,
         }
     }
 }
@@ -220,6 +229,13 @@ impl<T> NodeBuilder<T> {
         self.name = Some(name.to_string());
         self
     }
+
+    #[allow(clippy::needless_pass_by_value)] // ergonomics
+    #[must_use]
+    pub fn with_context(mut self, context: impl ToString) -> Self {
+        self.context = Some(context.to_string());
+        self
+    }
 }
 
 impl NodeBuilder<()> {
@@ -229,6 +245,7 @@ impl NodeBuilder<()> {
             node: self.node,
             data: DataNodeData(data),
             name: self.name,
+            context: self.context,
         }
     }
 
@@ -238,6 +255,17 @@ impl NodeBuilder<()> {
             node: self.node,
             data: PartialNodeData(data),
             name: self.name,
+            context: self.context,
+        }
+    }
+
+    #[must_use]
+    pub fn with_array(self, data: Vec<NodeRef>) -> NodeBuilder<ArrayNodeData> {
+        NodeBuilder {
+            node: self.node,
+            data: ArrayNodeData(data),
+            name: self.name,
+            context: self.context,
         }
     }
 
@@ -247,6 +275,17 @@ impl NodeBuilder<()> {
             node: self.node,
             data: TreeNodeData(data),
             name: self.name,
+            context: self.context,
+        }
+    }
+
+    #[must_use]
+    pub fn with_number(self, data: impl Into<u64>) -> NodeBuilder<NumberNodeData> {
+        NodeBuilder {
+            node: self.node,
+            data: NumberNodeData(data.into()),
+            name: self.name,
+            context: self.context,
         }
     }
 }
@@ -258,6 +297,7 @@ impl NodeBuilder<DataNodeData> {
             this: self.node,
             parent: None,
             name: self.name,
+            context: self.context,
             body: NodeBody::Data(self.data.0),
         });
         self.node
@@ -271,6 +311,7 @@ impl NodeBuilder<PartialNodeData> {
             this: self.node,
             parent: None,
             name: self.name,
+            context: self.context,
             body: NodeBody::Partial(RwLock::new(self.data.0)),
         });
         self.node
@@ -284,6 +325,7 @@ impl NodeBuilder<TreeNodeData> {
             this: self.node,
             parent: None,
             name: self.name,
+            context: self.context,
             body: NodeBody::Tree(
                 self.data
                     .0
@@ -304,11 +346,25 @@ impl NodeBuilder<TreeNodeData> {
     }
 }
 
+impl NodeBuilder<NumberNodeData> {
+    #[must_use]
+    pub fn build(self) -> NodeRef {
+        self.node.insert(Node {
+            this: self.node,
+            parent: None,
+            name: self.name,
+            context: self.context,
+            body: NodeBody::Number(self.data.0),
+        });
+        self.node
+    }
+}
+
 impl<T: Default> Default for NodeBuilder<T> {
     fn default() -> Self {
         // SAFETY: when the node is built, before returning the `NodeRef`, the node will
         // be inserted.
-        Self::in_place(unsafe { NodeRef::reserve() })
+        Self::in_place(NodeRef::reserve())
     }
 }
 

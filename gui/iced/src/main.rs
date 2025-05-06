@@ -5,7 +5,7 @@ use iced::widget::{Column, button, column, container, keyed_column, row, scrolla
 use iced::{Element, Length, Task, Theme, window};
 use iced_aw::menu::Item;
 use iced_aw::{Menu, menu_bar, menu_items};
-use opendisasm_core::{Node, NodeRef, add_disassembler_format};
+use opendisasm_core::{Node, NodeBody, NodeRef, add_disassembler_format};
 use opendisasm_elf::ElfFormat;
 use rfd::AsyncFileDialog;
 
@@ -110,14 +110,26 @@ impl OpenDisasm {
     fn view_node(&self, node_ref: NodeRef) -> Element<Message> {
         let node = node_ref.get();
         let expanded = *self.expanded.get(&node_ref).unwrap_or(&false);
-        let mut result = Column::new().push(row![
-            button(if expanded { "v" } else { ">" }).on_press(Message::ToggleOpen(node_ref)),
-            text(if let Some(name) = &node.name {
-                name.clone()
-            } else {
-                "unnamed".into()
-            })
-        ]);
+        let mut title = if let Some(name) = &node.name {
+            name.clone()
+        } else {
+            "<unnamed>".into()
+        };
+        match node.body() {
+            NodeBody::Number(x) => title += &format!(": {x}"),
+            _ => {}
+        }
+        if let Some(x) = &node.context {
+            title += &format!(" ({x})");
+        }
+        let mut result = Column::new().push(if node.expandable() {
+            row![
+                button(if expanded { "v" } else { ">" }).on_press(Message::ToggleOpen(node_ref)),
+                text(title)
+            ]
+        } else {
+            row![text(title)]
+        });
         if expanded {
             result = result.push(
                 container(if self.resolved.get(&node_ref) == Some(&false) {
